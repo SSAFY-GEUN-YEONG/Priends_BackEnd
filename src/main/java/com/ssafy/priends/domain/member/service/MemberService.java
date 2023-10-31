@@ -4,7 +4,7 @@ import com.ssafy.priends.domain.member.dto.MemberDto;
 
 public interface MemberService {
 	
-	void emailCheckMember(String userEmail);
+	int emailCheckMember(String userEmail);
 	
 	void signUpMember(MemberDto memberDto);
 }
