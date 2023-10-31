@@ -1,5 +1,13 @@
 package com.ssafy.priends.domain.member.controller;
 
-public class MemberController {
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+import lombok.extern.slf4j.Slf4j;
+
+@RestController
+@RequestMapping("/member")
+@Slf4j
+public class MemberController {
+	
 }

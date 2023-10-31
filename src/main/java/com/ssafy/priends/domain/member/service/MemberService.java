@@ -1,5 +1,10 @@
 package com.ssafy.priends.domain.member.service;
 
-public interface MemberService {
+import com.ssafy.priends.domain.member.dto.MemberDto;
 
+public interface MemberService {
+	
+	void emailCheckMember(String userEmail);
+	
+	void signUpMember(MemberDto memberDto);
 }
