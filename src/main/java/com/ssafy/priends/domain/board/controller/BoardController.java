@@ -43,20 +43,15 @@ public class BoardController {
 		return "redirect:/board/list";
 	}
 
-//	
-//	@GetMapping("/list")
-//	public ModelAndView listPost(@RequestParam Map<String, String> map) throws Exception {
-//		ModelAndView mav = new ModelAndView();
-//		List<BoardDto> list = boardService.list(map);
-//		PageNavigation pageNavigation = boardService.makePageNavigation(map);
-//		mav.addObject("articles", list);
-//		mav.addObject("navigation", pageNavigation);
-//		mav.addObject("pgno", map.get("pgno"));
-//		mav.addObject("key", map.get("key"));
-//		mav.addObject("word", map.get("word"));
-//		mav.setViewName("board/list");
-//		return mav;
-//	}
+	
+	@GetMapping("/list")
+	public ModelAndView listPost(@RequestParam Map<String, String> map) throws Exception {
+		ModelAndView mav = new ModelAndView();
+		List<BoardDto> list = boardService.listPost(map);
+		mav.addObject("posts", list);
+		mav.setViewName("board/list");
+		return mav;
+	}
 //
 //	@GetMapping("/view")
 //	public String view(@RequestParam("articleno") int articleNo, @RequestParam Map<String, String> map, Model model)
