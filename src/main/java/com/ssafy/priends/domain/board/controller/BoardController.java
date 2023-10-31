@@ -5,18 +5,19 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
-import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ssafy.priends.domain.board.dto.BoardDto;
 import com.ssafy.priends.domain.board.service.BoardService;
 import com.ssafy.priends.domain.member.dto.MemberDto;
 
-@Controller
+@RestController
 @RequestMapping("/board")
 public class BoardController {
 	
@@ -52,32 +53,24 @@ public class BoardController {
 		mav.setViewName("board/list");
 		return mav;
 	}
-//
-//	@GetMapping("/view")
-//	public String view(@RequestParam("articleno") int articleNo, @RequestParam Map<String, String> map, Model model)
-//			throws Exception {
-//		logger.debug("view articleNo : {}", articleNo);
-//		BoardDto boardDto = boardService.getArticle(articleNo);
-//		boardService.updateHit(articleNo);
-//		model.addAttribute("article", boardDto);
-//		model.addAttribute("pgno", map.get("pgno"));
-//		model.addAttribute("key", map.get("key"));
-//		model.addAttribute("word", map.get("word"));
-//		return "board/view";
-//	}
-//
-//	@GetMapping("/modify")
-//	public String modify(@RequestParam("articleno") int articleNo, @RequestParam Map<String, String> map, Model model)
-//			throws Exception {
-//		logger.debug("modify articleNo : {}", articleNo);
-//		BoardDto boardDto = boardService.getArticle(articleNo);
-//		model.addAttribute("article", boardDto);
-//		model.addAttribute("pgno", map.get("pgno"));
-//		model.addAttribute("key", map.get("key"));
-//		model.addAttribute("word", map.get("word"));
-//		return "board/modify";
-//	}
-//
+
+	@GetMapping("/view")
+	public String view(@RequestParam("id") int id, @RequestParam Map<String, String> map, Model model)
+			throws Exception {
+		BoardDto board= boardService.getPost(id);
+		boardService.updateHit(id);
+		model.addAttribute("post", board);
+		return "board/view";
+	}
+
+	@GetMapping("/modify")
+	public String modify(@RequestParam("id") int id, @RequestParam Map<String, String> map, Model model)
+			throws Exception {
+		BoardDto board = boardService.getPost(id);
+		model.addAttribute("post", board);
+		return "board/modify";
+	}
+
 //	@PostMapping("/modify")
 //	public String modify(BoardDto boardDto, @RequestParam Map<String, String> map,
 //			RedirectAttributes redirectAttributes) throws Exception {
