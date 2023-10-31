@@ -34,12 +34,14 @@ DROP TABLE IF EXISTS `boards`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `boards` (
-  `id` bigint NOT NULL,
+  `id` bigint NOT NULL AUTO_INCREMENT,
   `title` varchar(50) NOT NULL,
   `content` varchar(10000) NOT NULL,
+  `hit` INT NOT NULL DEFAULT 0,
+  `like` INT NOT NULL DEFAULT 0,
   `createdAt` datetime DEFAULT CURRENT_TIMESTAMP,
   `updatedAt` datetime DEFAULT CURRENT_TIMESTAMP,
-  `isDeleted` tinyint NOT NULL DEFAULT '0',
+  `isDeleted` tinyint NOT NULL DEFAULT 0,
   `category` enum('NOTICE','FREE','PATH') NOT NULL,
   `user_id` bigint NOT NULL,
   PRIMARY KEY (`id`),
@@ -56,9 +58,9 @@ DROP TABLE IF EXISTS `comments`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `comments` (
-  `id` bigint NOT NULL,
+  `id` bigint NOT NULL AUTO_INCREMENT,
   `content` varchar(1000) NOT NULL,
-  `isDeleted` tinyint(1) DEFAULT '0',
+  `isDeleted` tinyint(1) DEFAULT 0,
   `createdAt` datetime DEFAULT CURRENT_TIMESTAMP,
   `board_id` bigint NOT NULL,
   `user_id` bigint DEFAULT NULL,
@@ -78,9 +80,9 @@ DROP TABLE IF EXISTS `path`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `path` (
-  `id` bigint NOT NULL,
+  `id` bigint NOT NULL AUTO_INCREMENT,
   `content` varchar(1000) NOT NULL,
-  `isEnd` tinyint(1) DEFAULT '0',
+  `isEnd` tinyint(1) DEFAULT 0,
   `createdAt` datetime DEFAULT CURRENT_TIMESTAMP,
   `start_date` datetime DEFAULT NULL,
   `end_date` datetime DEFAULT NULL,
