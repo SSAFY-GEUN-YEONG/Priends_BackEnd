@@ -3,7 +3,7 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 	
 <mapper namespace="com.ssafy.priends.domain.member.mapper.MemberMapper">
-	<select id="emailCheck" parameterType="String">
+	<select id="emailCheckMember" parameterType="String">
 		select count(id)
 		from members
 		where email = #{userEmail}
