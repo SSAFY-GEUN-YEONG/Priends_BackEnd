@@ -24,30 +24,30 @@ public class BoardServiceImpl implements BoardService {
 		boardMapper.writePost(board);
 	}
 
-	@Override
-	public BoardDto getPost(int boardId) throws Exception {
-		return boardMapper.getPost(boardId);
-	}
+//	@Override
+//	public BoardDto getPost(int boardId) throws Exception {
+//		return boardMapper.getPost(boardId);
+//	}
 
 	@Override
-	public List<BoardDto> listPost(Map<String, String> map) throws Exception {
+	public List<BoardDto> listPost(String category) throws Exception {
 		Map<String, Object> param = new HashMap<>();
-		return boardMapper.listPost(param);
+		return boardMapper.listPost(category);
 	}
 
-	@Override
-	public void updateHit(int boardId) throws Exception {
-		boardMapper.updateHit(boardId);
-	}
-
-	@Override
-	public void modifyPost(BoardDto board) throws Exception {
-		boardMapper.modifyPost(board);
-	}
-
-	@Override
-	public void deletePost(int boardId) throws Exception {
-		boardMapper.deletePost(boardId);
-	}
+//	@Override
+//	public void updateHit(int boardId) throws Exception {
+//		boardMapper.updateHit(boardId);
+//	}
+//
+//	@Override
+//	public void modifyPost(BoardDto board) throws Exception {
+//		boardMapper.modifyPost(board);
+//	}
+//
+//	@Override
+//	public void deletePost(int boardId) throws Exception {
+//		boardMapper.deletePost(boardId);
+//	}
 
 }

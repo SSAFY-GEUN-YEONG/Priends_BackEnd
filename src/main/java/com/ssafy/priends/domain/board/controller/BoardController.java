@@ -5,8 +5,10 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,25 +30,22 @@ public class BoardController {
 		this.boardService = boardService;
 	}
 	
-	@GetMapping("/write")
-	public String writePost() {
-		return "board/write";
-	}
+ 
 	
-	
+	// 동근오빠랑 합치고 세션추가해서 member_id 가져오기
 	@PostMapping("/write")
-	public String writePost(BoardDto board, HttpSession session) throws Exception {
-		MemberDto member = (MemberDto) session.getAttribute("userinfo");
-		board.setUser_id(member.getId());
+	public ResponseEntity<?> writePost(@RequestParam BoardDto board) throws Exception {
+//		MemberDto member = (MemberDto) session.getAttribute("userinfo");
+//		board.setUser_id(member.getId());
 		
 		boardService.writePost(board);
 		
-		return "redirect:/board/list";
+		return ResponseEntity.ok().body(0);  //0:성공 1:실패
 	}
 
 	
 	@GetMapping("/list")
-	public ModelAndView listPost(@RequestParam Map<String, String> map) throws Exception {
+	public ModelAndView listPost(@RequestParam String category) throws Exception {
 		ModelAndView mav = new ModelAndView();
 		List<BoardDto> list = boardService.listPost(map);
 		mav.addObject("posts", list);
@@ -54,22 +53,22 @@ public class BoardController {
 		return mav;
 	}
 
-	@GetMapping("/view")
-	public String view(@RequestParam("id") int id, @RequestParam Map<String, String> map, Model model)
-			throws Exception {
-		BoardDto board= boardService.getPost(id);
-		boardService.updateHit(id);
-		model.addAttribute("post", board);
-		return "board/view";
-	}
-
-	@GetMapping("/modify")
-	public String modify(@RequestParam("id") int id, @RequestParam Map<String, String> map, Model model)
-			throws Exception {
-		BoardDto board = boardService.getPost(id);
-		model.addAttribute("post", board);
-		return "board/modify";
-	}
+//	@GetMapping("/view")
+//	public String view(@RequestParam("id") int id, @RequestParam Map<String, String> map, Model model)
+//			throws Exception {
+//		BoardDto board= boardService.getPost(id);
+//		boardService.updateHit(id);
+//		model.addAttribute("post", board);
+//		return "board/view";
+//	}
+//
+//	@GetMapping("/modify")
+//	public String modify(@RequestParam("id") int id, @RequestParam Map<String, String> map, Model model)
+//			throws Exception {
+//		BoardDto board = boardService.getPost(id);
+//		model.addAttribute("post", board);
+//		return "board/modify";
+//	}
 
 //	@PostMapping("/modify")
 //	public String modify(BoardDto boardDto, @RequestParam Map<String, String> map,

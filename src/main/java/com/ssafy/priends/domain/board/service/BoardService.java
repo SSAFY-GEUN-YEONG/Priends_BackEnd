@@ -8,14 +8,15 @@ import com.ssafy.priends.domain.board.dto.BoardDto;
 public interface BoardService {
 	
 	void writePost(BoardDto board) throws Exception;
-	BoardDto getPost(int boardId) throws Exception;
-
-	List<BoardDto> listPost(Map<String, String> map) throws Exception;
-
-	void updateHit(int boardId) throws Exception;
 	
-	void modifyPost(BoardDto board) throws Exception;
-	void deletePost(int boardId) throws Exception;
+//	BoardDto getPost(int boardId) throws Exception;
+//
+//	List<BoardDto> listPost(Map<String, String> map) throws Exception;
+//
+//	void updateHit(int boardId) throws Exception;
+//	
+//	void modifyPost(BoardDto board) throws Exception;
+//	void deletePost(int boardId) throws Exception;
 	
 	
 	

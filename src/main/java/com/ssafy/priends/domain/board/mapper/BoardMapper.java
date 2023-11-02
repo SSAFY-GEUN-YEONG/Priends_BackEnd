@@ -13,14 +13,14 @@ public interface BoardMapper {
 	
 	void writePost(BoardDto board) throws SQLException;
 
-	BoardDto getPost(int boardId) throws SQLException;
-
-	List<BoardDto> listPost(Map<String, Object> map) throws SQLException;
-
-	void updateHit(int boardId) throws SQLException;
-
-	void modifyPost(BoardDto board) throws SQLException;
-
-	void deletePost(int boardId) throws SQLException;
+//	BoardDto getPost(int boardId) throws SQLException;
+//
+//	List<BoardDto> listPost(Map<String, Object> map) throws SQLException;
+//
+//	void updateHit(int boardId) throws SQLException;
+//
+//	void modifyPost(BoardDto board) throws SQLException;
+//
+//	void deletePost(int boardId) throws SQLException;
 	
 }
