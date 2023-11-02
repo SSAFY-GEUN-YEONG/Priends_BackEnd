@@ -18,6 +18,7 @@ CREATE TABLE `members` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `password` varchar(500) NOT NULL,
   `email` varchar(50) NOT NULL,
+  `name` varchar(10) NOT NULL,
   `status` tinyint(1) NOT NULL DEFAULT '0',
   `alarm` tinyint(1) DEFAULT '0',
   `role` enum('ADMIN','MANAGER','USER') DEFAULT NULL,
@@ -43,10 +44,10 @@ CREATE TABLE `boards` (
   `updatedAt` datetime DEFAULT CURRENT_TIMESTAMP,
   `isDeleted` tinyint NOT NULL DEFAULT 0,
   `category` enum('NOTICE','FREE','PATH') NOT NULL,
-  `user_id` bigint NOT NULL,
+  `member_id` bigint NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `boards_to_members_id_fk_idx` (`user_id`),
-  CONSTRAINT `boards_to_members_id_fk` FOREIGN KEY (`user_id`) REFERENCES `members` (`id`)
+  KEY `boards_to_members_id_fk_idx` (`member_id`),
+  CONSTRAINT `boards_to_members_id_fk` FOREIGN KEY (`member_id`) REFERENCES `members` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -63,12 +64,12 @@ CREATE TABLE `comments` (
   `isDeleted` tinyint(1) DEFAULT 0,
   `createdAt` datetime DEFAULT CURRENT_TIMESTAMP,
   `board_id` bigint NOT NULL,
-  `user_id` bigint DEFAULT NULL,
+  `member_id` bigint DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `comments_to_boards_id_fk_idx` (`board_id`),
-  KEY `comments_to_members_id_fk_idx` (`user_id`),
+  KEY `comments_to_members_id_fk_idx` (`member_id`),
   CONSTRAINT `comments_to_boards_id_fk` FOREIGN KEY (`board_id`) REFERENCES `boards` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `comments_to_members_id_fk` FOREIGN KEY (`user_id`) REFERENCES `members` (`id`)
+  CONSTRAINT `comments_to_members_id_fk` FOREIGN KEY (`member_id`) REFERENCES `members` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -86,7 +87,11 @@ CREATE TABLE `path` (
   `createdAt` datetime DEFAULT CURRENT_TIMESTAMP,
   `start_date` datetime DEFAULT NULL,
   `end_date` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `member_id` bigint DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `path_to_members_id_fk_idx` (`member_id`),
+  CONSTRAINT `path_to_members_id_fk` FOREIGN KEY (`member_id`) REFERENCES `members` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dump completed on 2023-10-31 16:10:05
+-- Dump completed on 2023-10-31 16:10:05 
+  
