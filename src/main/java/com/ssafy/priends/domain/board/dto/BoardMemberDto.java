@@ -11,7 +11,7 @@ import lombok.ToString;
 @ToString
 @AllArgsConstructor	// 필드 전부 생성자
 @NoArgsConstructor	// 기본 생성자
-public class BoardDto {
+public class BoardMemberDto {
 	
 	private Long id;
 	private String title;
@@ -23,4 +23,7 @@ public class BoardDto {
 	private boolean isdeleted;
 	private String category;
 	private Long member_id;
+	
+	private String member_email;
+	private String member_name;
 }
