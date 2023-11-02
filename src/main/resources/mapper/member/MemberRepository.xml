@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<mapper namespace="com.ssafy.priends.domain.member.mapper.MemberMapper">
+	<select id="emailCheckMember" parameterType="String">
+		select count(id)
+		from members
+		where email = #{userEmail}
+	</select>
+	
+	<!-- 회원가입  -->
+	<!-- ID값은 AUTO_INCREMENT로 생성된 PK값이므로 -->
+	<!-- useGeneratedKeys와 keyProperty 속성을 사용하여 회원가입 이후 해당 속성을 바로 사용 가능 -->
+	<insert id="joinMember" parameterType="memberDto" useGeneratedKeys="true" keyProperty="id">
+    	insert into members (email, password, status, alarm, role)
+    	values (#{id}, #{email}, #{password}, #{status}, #{alarm}, #{role})
+	</insert>
+</mapper>

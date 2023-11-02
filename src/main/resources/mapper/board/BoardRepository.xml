@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<mapper namespace="com.ssafy.priends.domain.board.mapper.BoardMapper">
+	
+	<insert id="writePost" parameterType="boardDto">
+		insert into boards (id, title, content, createdAt, category, user_id)
+		values (#{id}, #{title}, #{content}, now(), #{category}, #{user_id})
+	</insert>
+	
+	<select id="listPost" parameterType="map" resultType="boardDto">
+		select b.id, b.title, b.content, b.hit, b.createdAt, m.email
+		from boards b, members m 
+		where b.user_id = m.id
+		order by b.id
+	</select>
+	
+	
+	<select id="getPost" parameterType="int" resultType="boardDto">
+		select b.id, b.title, b.content, b.hit, b.like, b.createdAt, b.category, m.email
+		from boards b, members m
+		where b.user_id = m.id
+		and b.id = #{id}
+	</select>
+	
+	<update id="updateHit" parameterType="int">
+		update boards
+		set hit = hit + 1
+		where id = #{id}
+	</update>
+	
+	
+</mapper>
