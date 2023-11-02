@@ -26,6 +26,7 @@ public class MemberServiceImpl implements MemberService {
 	// 회원가입 처리
 	@Override
 	public void signUpMember(MemberDto memberDto) {
+		memberDto.setRole("USER");
 		memberMapper.signUpMember(memberDto);
 	}
 
