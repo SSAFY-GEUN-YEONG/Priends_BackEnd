@@ -83,6 +83,6 @@ public class BoardDto {
 	public void setMember_id(Long member_id) {
 		this.member_id = member_id;
 	}
-	
+	 
 	
 }
