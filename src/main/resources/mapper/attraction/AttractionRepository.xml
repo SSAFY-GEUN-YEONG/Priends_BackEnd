@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper
+	namespace="com.ssafy.priends.domain.attraction.mapper.AttractionMapper">
+
+ 
+	<select id="getAreacode" parameterType="int">		
+			<if test="sido != 0 ">
+			select g.sido_code, g.gugun_code, s.sido_name, g.gugun_name
+			from gugun g join sido s
+			on g.sido_code = s.sido_code
+			where s.sido_code = #{sido};
+			</if>
+			<if test="sido == 0 ">
+			select *
+			from sido
+			</if>
+	</select>
+
+</mapper>

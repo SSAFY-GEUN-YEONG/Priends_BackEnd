@@ -37,10 +37,11 @@
 		where id = #{id};	
 	</update>
 	
-	<delete id="deletePost">
-		delete from boards
-		where id = #{id}
-	</delete>
+	<update id="deletePost">
+		update boards
+		set isDeleted = 1
+		where id = #{id};
+	</update>
 
 	
 </mapper>
