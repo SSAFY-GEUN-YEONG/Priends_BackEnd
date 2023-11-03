@@ -9,17 +9,24 @@ import com.ssafy.priends.domain.attraction.dto.AttractionDto;
 import com.ssafy.priends.domain.attraction.mapper.AttractionMapper;
 
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class AttractionServiceImpl implements AttractionService{
 	
-	private AttractionMapper attractionMapper;
+	private final AttractionMapper attractionMapper;
 
  
 	@Override
-	public List<AttractionDto> searchAttraction(int area, int typeid, String keyword) throws Exception {
-		return attractionMapper.searchAttraction(area, typeid, keyword);
+	public List<AttractionDto> searchAttractions(int area, int typeid, String keyword) throws Exception {
+		return attractionMapper.searchAttractions(area, typeid, keyword);
+	}
+ 
+
+	@Override
+	public AttractionDto getAttraction(int attractionId) throws Exception {
+		return attractionMapper.getAttraction(attractionId);
 	}
  
 }

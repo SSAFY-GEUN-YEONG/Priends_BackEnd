@@ -6,5 +6,7 @@ import com.ssafy.priends.domain.attraction.dto.AttractionDto;
 
 public interface AttractionService {
 	
-	List<AttractionDto> searchAttraction(int area, int typeid, String keyword) throws Exception;
+	List<AttractionDto> searchAttractions(int area, int typeid, String keyword) throws Exception;
+	AttractionDto getAttraction(int attractionId) throws Exception;
+
 }
