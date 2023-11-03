@@ -4,31 +4,33 @@
 	
 <mapper namespace="com.ssafy.priends.domain.board.mapper.BoardMapper">
 	
-	<insert id="writePost" parameterType="boardDto">
-		insert into boards (id, title, content, createdAt, category, user_id)
-		values (#{id}, #{title}, #{content}, now(), #{category}, #{user_id})
+	<insert id="writePost" parameterType="boardDto" >
+		insert into boards (title, content,  category, member_id)
+		values ( #{title}, #{content}, #{category}, 1)
 	</insert>
 	
-	<select id="listPost" parameterType="map" resultType="boardDto">
-		select b.id, b.title, b.content, b.hit, b.createdAt, m.email
-		from boards b, members m 
-		where b.user_id = m.id
+	<select id="listPost" parameterType="String" >
+		select b.id, b.title, b.content, b.hit, b.createdAt, m.email as member_email, m.name as member_name
+		from boards b join members m 
+		on b.member_id = m.id
+		where b.category = #{category}
 		order by b.id
 	</select>
 	
-	
-	<select id="getPost" parameterType="int" resultType="boardDto">
-		select b.id, b.title, b.content, b.hit, b.like, b.createdAt, b.category, m.email
-		from boards b, members m
-		where b.user_id = m.id
-		and b.id = #{id}
+	<select id="getPost" parameterType="long" >
+		select b.id, b.title, b.content, b.hit, b.like, b.createdAt, b.category, m.email as member_email
+		from boards b join members m
+		on b.member_id = m.id
+		where b.id = #{id}
 	</select>
 	
+	<!-- 
 	<update id="updateHit" parameterType="int">
 		update boards
 		set hit = hit + 1
 		where id = #{id}
 	</update>
+	 -->
 	
 	
 </mapper>

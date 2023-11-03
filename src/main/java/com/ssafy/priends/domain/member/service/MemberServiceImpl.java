@@ -6,16 +6,16 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ssafy.priends.domain.member.dto.MemberDto;
 import com.ssafy.priends.domain.member.mapper.MemberMapper;
 
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
-@Transactional
-@RequiredArgsConstructor
+@Transactional 
+@AllArgsConstructor
 public class MemberServiceImpl implements MemberService {
 
-	private final MemberMapper memberMapper;
+	private MemberMapper memberMapper;
 	
 	// 이메일 중복 체크
 	@Override

@@ -11,7 +11,7 @@ import lombok.ToString;
 @ToString
 @AllArgsConstructor	// 필드 전부 생성자
 @NoArgsConstructor	// 기본 생성자
-public class BoardDto {
+public class BoardMemberDto {
 	
 	private Long id;
 	private String title;
@@ -23,6 +23,9 @@ public class BoardDto {
 	private boolean isdeleted;
 	private String category;
 	private Long member_id;
+	
+	private String member_email;
+	private String member_name;
 	public Long getId() {
 		return id;
 	}
@@ -83,6 +86,18 @@ public class BoardDto {
 	public void setMember_id(Long member_id) {
 		this.member_id = member_id;
 	}
-	 
+	public String getMember_email() {
+		return member_email;
+	}
+	public void setMember_email(String member_email) {
+		this.member_email = member_email;
+	}
+	public String getMember_name() {
+		return member_name;
+	}
+	public void setMember_name(String member_name) {
+		this.member_name = member_name;
+	}
+	
 	
 }
