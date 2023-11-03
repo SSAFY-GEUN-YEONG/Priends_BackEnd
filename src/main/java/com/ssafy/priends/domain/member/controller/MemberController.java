@@ -8,16 +8,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.priends.domain.member.service.MemberService;
 
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("/member")
 @Slf4j
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class MemberController {	
 	
-	private final MemberService memberService;
+	private MemberService memberService;
 	
 	@PostMapping("/{email}/check")
 	public ResponseEntity<?> emailCheckMember(@PathVariable("email") String userEmail) {

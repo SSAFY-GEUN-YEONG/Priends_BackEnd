@@ -4,18 +4,19 @@ import java.util.List;
 import java.util.Map;
 
 import com.ssafy.priends.domain.board.dto.BoardDto;
+import com.ssafy.priends.domain.board.dto.BoardMemberDto;
 
 public interface BoardService {
 	
 	void writePost(BoardDto board) throws Exception;
-	BoardDto getPost(int boardId) throws Exception;
+	BoardMemberDto getPost(long id) throws Exception;
 
-	List<BoardDto> listPost(Map<String, String> map) throws Exception;
+	List<BoardMemberDto> listPost(String category) throws Exception;
 
-	void updateHit(int boardId) throws Exception;
+	void updateHit(long id) throws Exception;
 	
 	void modifyPost(BoardDto board) throws Exception;
-	void deletePost(int boardId) throws Exception;
+	void deletePost(long id) throws Exception;
 	
 	
 	

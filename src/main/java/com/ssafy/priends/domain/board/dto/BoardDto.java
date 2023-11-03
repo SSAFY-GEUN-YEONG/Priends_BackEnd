@@ -23,4 +23,6 @@ public class BoardDto {
 	private boolean isdeleted;
 	private String category;
 	private Long member_id;
+	 
+	
 }

@@ -26,4 +26,7 @@ public class BoardMemberDto {
 	
 	private String member_email;
 	private String member_name;
+	 
+	
+	
 }
