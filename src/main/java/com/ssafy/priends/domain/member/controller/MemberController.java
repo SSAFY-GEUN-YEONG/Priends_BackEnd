@@ -4,7 +4,9 @@ import com.ssafy.priends.domain.member.dto.MemberDto;
 import com.ssafy.priends.domain.member.dto.MemberGetDto;
 import com.ssafy.priends.domain.member.dto.MemberInfoDto;
 import com.ssafy.priends.domain.member.dto.MemberLoginRequestDto;
+import com.ssafy.priends.global.common.dto.MailCodeDto;
 import com.ssafy.priends.global.common.dto.Message;
+import com.ssafy.priends.global.infra.email.service.EmailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +27,9 @@ import javax.servlet.http.HttpSession;
 public class MemberController {	
 	
 	private final MemberService memberService;
-	
+
+	private final EmailService emailService;
+
 	@GetMapping("/{email}/check")
 	public ResponseEntity<Message<String>> emailCheckMember(@PathVariable("email") String memberEmail) {
 		int emailCheck = memberService.emailCheckMember(memberEmail);
@@ -82,6 +86,16 @@ public class MemberController {
 	public ResponseEntity<Message<String>> getPasswordMember(@PathVariable("memberId") Long memberId) {
 		String memberPassword = memberService.getPasswordMember(memberId);
 		return ResponseEntity.ok().body(Message.success("비밀번호 찾기: " + memberPassword));
+	}
+
+	// 임시 비밀번호 재발급
+	@GetMapping("/{memberEmail}/temp/password")
+	public ResponseEntity<Message> sendTempPassword(@PathVariable("memberEmail") String memberEmail) {
+		// 먼저 db에 사용자 이메일이 저장되어 있는지 확인하기
+
+		MailCodeDto mailCodeDto = emailService.sendSimpleMessage(memberEmail, false);
+		// 여기에 임시 비밀번호 재발급 하는 service 부르기
+		return ResponseEntity.ok().body(Message.success());
 	}
 
 }
