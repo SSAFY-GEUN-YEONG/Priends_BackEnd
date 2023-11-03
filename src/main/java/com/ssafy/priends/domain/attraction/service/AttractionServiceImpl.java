@@ -17,17 +17,9 @@ public class AttractionServiceImpl implements AttractionService{
 	private AttractionMapper attractionMapper;
 
  
-
 	@Override
-	public List<AreacodeDto> getAreacode(int sido) throws Exception {
-		return attractionMapper.getAreacode(sido);
+	public List<AttractionDto> searchAttraction(int area, int typeid, String keyword) throws Exception {
+		return attractionMapper.searchAttraction(area, typeid, keyword);
 	}
-
-//	@Override
-//	public List<AttractionDto> searchAttraction(int sido, int gugun, int content_type_id, String keyword)
-//			throws Exception {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
-
+ 
 }
