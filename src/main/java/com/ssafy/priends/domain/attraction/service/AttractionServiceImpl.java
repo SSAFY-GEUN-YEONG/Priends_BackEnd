@@ -19,8 +19,14 @@ public class AttractionServiceImpl implements AttractionService{
 
  
 	@Override
-	public List<AttractionDto> searchAttraction(int area, int typeid, String keyword) throws Exception {
-		return attractionMapper.searchAttraction(area, typeid, keyword);
+	public List<AttractionDto> searchAttractions(int area, int typeid, String keyword) throws Exception {
+		return attractionMapper.searchAttractions(area, typeid, keyword);
+	}
+ 
+
+	@Override
+	public AttractionDto getAttraction(int attractionId) throws Exception {
+		return attractionMapper.getAttraction(attractionId);
 	}
  
 }

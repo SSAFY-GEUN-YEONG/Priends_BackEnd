@@ -6,7 +6,7 @@
 	namespace="com.ssafy.priends.domain.attraction.mapper.AttractionMapper">
 
  
-	<select id="searchAttraction"  >		
+	<select id="searchAttractions"  >		
 			select * 
 			from attraction_info
 			where sido_code = #{area}  
@@ -24,6 +24,14 @@
 			<if test="keyword != null">
 				and title like '%${keyword}%'
 			</if>
+	</select>
+	
+	
+	<select id="getAttraction">
+	select i.content_id, i.title, i.addr1, i.addr2, i.latitude, i.longitude, i.first_image, i.sido_code, d.overview
+	from attraction_info i left join attraction_description d
+	on i.content_id = d.content_id
+	where i.content_id= #{attractionId};
 	</select>
 
  
