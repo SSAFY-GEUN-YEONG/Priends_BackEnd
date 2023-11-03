@@ -3,23 +3,23 @@ package com.ssafy.priends.domain.member.service;
 import com.ssafy.priends.domain.member.dto.MemberGetDto;
 import com.ssafy.priends.domain.member.dto.MemberInfoDto;
 import com.ssafy.priends.domain.member.dto.MemberLoginRequestDto;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ssafy.priends.domain.member.dto.MemberDto;
 import com.ssafy.priends.domain.member.mapper.MemberMapper;
 
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 
 @Service
 @Slf4j
 @Transactional 
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
 
-	private MemberMapper memberMapper;
+	private final MemberMapper memberMapper;
 	
 	// 이메일 중복 체크
 	@Override

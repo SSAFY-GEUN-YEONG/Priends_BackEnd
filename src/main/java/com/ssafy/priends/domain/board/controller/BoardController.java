@@ -29,7 +29,8 @@ import lombok.AllArgsConstructor;
 public class BoardController {
 	
 	private BoardService boardService;
- 
+	
+	// 멤버에서 토큰 보내주면 받아와서 boardDto에 넘겨줘야함
 	@PostMapping("/write")
 	public ResponseEntity<?> writePost( @RequestBody BoardDto boardDto ) throws Exception {
 //		MemberDto member = (MemberDto) session.getAttribute("userinfo");

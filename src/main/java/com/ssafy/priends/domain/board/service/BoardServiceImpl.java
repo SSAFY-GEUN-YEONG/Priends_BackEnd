@@ -50,4 +50,5 @@ public class BoardServiceImpl implements BoardService {
 		boardMapper.deletePost(id);
 	}
 
+
 }

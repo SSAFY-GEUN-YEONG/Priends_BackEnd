@@ -5,6 +5,7 @@ import com.ssafy.priends.domain.member.dto.MemberGetDto;
 import com.ssafy.priends.domain.member.dto.MemberInfoDto;
 import com.ssafy.priends.domain.member.dto.MemberLoginRequestDto;
 import com.ssafy.priends.global.common.dto.Message;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,10 +21,10 @@ import javax.servlet.http.HttpSession;
 @RestController
 @RequestMapping("/member")
 @Slf4j
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class MemberController {	
 	
-	private MemberService memberService;
+	private final MemberService memberService;
 	
 	@GetMapping("/{email}/check")
 	public ResponseEntity<Message<String>> emailCheckMember(@PathVariable("email") String memberEmail) {

@@ -14,12 +14,11 @@ public interface BoardService {
 	List<BoardMemberDto> listPost(String category) throws Exception;
 
 	void updateHit(long id) throws Exception;
-	
+
 	void modifyPost(BoardDto board) throws Exception;
 	void deletePost(long id) throws Exception;
 	
-	
-	
+
 	
 }
 

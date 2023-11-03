@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper
+	namespace="com.ssafy.priends.domain.attraction.mapper.AttractionMapper">
+
+ 
+	<select id="searchAttraction"  >		
+			<if test="sido != 0 ">
+			select g.sido_code, g.gugun_code, s.sido_name, g.gugun_name
+			from gugun g join sido s
+			on g.sido_code = s.sido_code
+			where s.sido_code = #{sido};
+			</if>
+			<if test="sido == 0 ">
+			select *
+			from sido
+			</if>
+	</select>
+
+
+
+
+<!-- 
+	 * @param area : sido 테이블의 sido_code 그대로 사용. 필수 입력
+	 * @param typeid : attraction_info테이블 content_type_id 
+	 * @param keyword : 검색어 입력. 필수 입력x
+	@GetMapping("/search")
+	public ResponseEntity<?> searchAttraction(@RequestParam int area, @RequestParam int typeid, @RequestParam(required = false) String keyword)
+			throws Exception {
+
+		List<AttractionDto> attractions = attractionService.searchAttraction(area, typeid, keyword);
+		return ResponseEntity.ok().body(attractions);
+	} -->
+</mapper>
