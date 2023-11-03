@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,7 +31,7 @@ public class BoardController {
 	private BoardService boardService;
  
 	@PostMapping("/write")
-	public ResponseEntity<?> writePost( @RequestParam BoardDto boardDto ) throws Exception {
+	public ResponseEntity<?> writePost( @RequestBody BoardDto boardDto ) throws Exception {
 //		MemberDto member = (MemberDto) session.getAttribute("userinfo");
 //		board.setUser_id(member.getId());
 		
@@ -39,6 +40,7 @@ public class BoardController {
 		return ResponseEntity.ok().body(0); //0:성공, 1:실패
 	}
  
+	// category에 따라서 글 가져오기 -> category : 'NOTICE','FREE','PATH'
 	@GetMapping("/list")
 	public ResponseEntity<?> listPost(@RequestParam String category) throws Exception {
 		List<BoardMemberDto> list = boardService.listPost(category);
@@ -48,39 +50,26 @@ public class BoardController {
 	@GetMapping("/view")
 	public ResponseEntity<?> getPost(@RequestParam("id") long id ) throws Exception {
 		System.out.println("id=" + id);
+		boardService.updateHit(id);
 		BoardMemberDto board = boardService.getPost(id);
-//		boardService.updateHit(id);
 		return ResponseEntity.ok().body(board);
 	}
 
-//	@GetMapping("/modify")
-//	public String modify(@RequestParam("id") int id, @RequestParam Map<String, String> map, Model model)
-//			throws Exception {
-//		BoardDto board = boardService.getPost(id);
-//		model.addAttribute("post", board);
-//		return "board/modify";
-//	}
+	@GetMapping("/modify")
+	public ResponseEntity<?> modifyPost(@RequestParam("id") int id ) throws Exception {
+		BoardMemberDto board = boardService.getPost(id);
+		return ResponseEntity.ok().body(board);
+	}
 
-//	@PostMapping("/modify")
-//	public String modify(BoardDto boardDto, @RequestParam Map<String, String> map,
-//			RedirectAttributes redirectAttributes) throws Exception {
-//		logger.debug("modify boardDto : {}", boardDto);
-//		boardService.modifyArticle(boardDto);
-//		redirectAttributes.addAttribute("pgno", map.get("pgno"));
-//		redirectAttributes.addAttribute("key", map.get("key"));
-//		redirectAttributes.addAttribute("word", map.get("word"));
-//		return "redirect:/article/list";
-//	}
-//
-//	@GetMapping("/delete")
-//	public String delete(@RequestParam("articleno") int articleNo, @RequestParam Map<String, String> map,
-//			RedirectAttributes redirectAttributes) throws Exception {
-//		logger.debug("delete articleNo : {}", articleNo);
-////		boardService.deleteArticle(articleNo, servletContext.getRealPath(UPLOAD_PATH));
-//		boardService.deleteArticle(articleNo, uploadPath);
-//		redirectAttributes.addAttribute("pgno", map.get("pgno"));
-//		redirectAttributes.addAttribute("key", map.get("key"));
-//		redirectAttributes.addAttribute("word", map.get("word"));
-//		return "redirect:/article/list";
-//	}
+	@PostMapping("/modify")
+	public ResponseEntity<?> modifyPost(@RequestBody BoardDto board) throws Exception {
+		boardService.modifyPost(board);
+		return ResponseEntity.ok().body(0);
+	}
+
+	@GetMapping("/delete")
+	public ResponseEntity<?> deletePost(@RequestParam("id") long id) throws Exception {
+		boardService.deletePost(id);
+		return ResponseEntity.ok().body(0);
+	}
 }

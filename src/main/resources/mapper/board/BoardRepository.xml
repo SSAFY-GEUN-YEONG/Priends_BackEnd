@@ -10,7 +10,7 @@
 	</insert>
 	
 	<select id="listPost" parameterType="String" >
-		select b.id, b.title, b.content, b.hit, b.createdAt, m.email as member_email, m.name as member_name
+		select b.id, b.title, b.content, b.hit, b.createdAt, m.id as member_id, m.email as member_email, m.name as member_name
 		from boards b join members m 
 		on b.member_id = m.id
 		where b.category = #{category}
@@ -18,19 +18,29 @@
 	</select>
 	
 	<select id="getPost" parameterType="long" >
-		select b.id, b.title, b.content, b.hit, b.like, b.createdAt, b.category, m.email as member_email
+		select b.id, b.title, b.content, b.hit, b.like, b.createdAt, b.category,  m.id as member_id, m.email as member_email, m.name as member_name
 		from boards b join members m
 		on b.member_id = m.id
 		where b.id = #{id}
 	</select>
 	
-	<!-- 
-	<update id="updateHit" parameterType="int">
+	<update id="updateHit" parameterType="long">
 		update boards
 		set hit = hit + 1
 		where id = #{id}
 	</update>
-	 -->
 	
+	<update id="modifyPost" parameterType="boardDto">
+		update boards
+		set title =  #{title}, content= #{content}, 
+			updatedAt = CURRENT_TIMESTAMP
+		where id = #{id};	
+	</update>
+	
+	<delete id="deletePost">
+		delete from boards
+		where id = #{id}
+	</delete>
+
 	
 </mapper>
