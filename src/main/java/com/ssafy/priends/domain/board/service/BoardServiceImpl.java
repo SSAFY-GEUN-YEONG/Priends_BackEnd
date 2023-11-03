@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.priends.domain.board.dto.BoardDto;
@@ -13,10 +14,10 @@ import com.ssafy.priends.domain.board.mapper.BoardMapper;
 import lombok.AllArgsConstructor;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class BoardServiceImpl implements BoardService {
 
-	private BoardMapper boardMapper;
+	private final BoardMapper boardMapper;
 	 
 
 	@Override
