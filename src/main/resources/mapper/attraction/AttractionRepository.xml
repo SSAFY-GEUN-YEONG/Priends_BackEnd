@@ -7,7 +7,16 @@
 
  
 	<select id="searchAttraction"  >		
-			 
+			<if test="sido != 0 ">
+			select g.sido_code, g.gugun_code, s.sido_name, g.gugun_name
+			from gugun g join sido s
+			on g.sido_code = s.sido_code
+			where s.sido_code = #{sido};
+			</if>
+			<if test="sido == 0 ">
+			select *
+			from sido
+			</if>
 	</select>
 
 
