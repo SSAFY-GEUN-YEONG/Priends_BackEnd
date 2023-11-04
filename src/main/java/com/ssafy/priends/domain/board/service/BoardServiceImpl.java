@@ -4,50 +4,52 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.priends.domain.board.dto.BoardDto;
+import com.ssafy.priends.domain.board.dto.BoardMemberDto;
 import com.ssafy.priends.domain.board.mapper.BoardMapper;
 
+import lombok.AllArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class BoardServiceImpl implements BoardService {
 
-	private BoardMapper boardMapper;
-	
-	public BoardServiceImpl(BoardMapper boardMapper) {
-		super();
-		this.boardMapper = boardMapper;
-	}
+	private final BoardMapper boardMapper;
+	 
 
 	@Override
 	public void writePost(BoardDto board) throws Exception {
 		boardMapper.writePost(board);
 	}
 
-//	@Override
-//	public BoardDto getPost(int boardId) throws Exception {
-//		return boardMapper.getPost(boardId);
-//	}
+	@Override
+	public BoardMemberDto getPost(long id) throws Exception {
+		System.out.println("service impl id " + id);
+		return boardMapper.getPost(id);
+	}
 
 	@Override
-	public List<BoardDto> listPost(String category) throws Exception {
-		Map<String, Object> param = new HashMap<>();
+	public List<BoardMemberDto> listPost(String category) throws Exception {
 		return boardMapper.listPost(category);
 	}
 
-//	@Override
-//	public void updateHit(int boardId) throws Exception {
-//		boardMapper.updateHit(boardId);
-//	}
-//
-//	@Override
-//	public void modifyPost(BoardDto board) throws Exception {
-//		boardMapper.modifyPost(board);
-//	}
-//
-//	@Override
-//	public void deletePost(int boardId) throws Exception {
-//		boardMapper.deletePost(boardId);
-//	}
+	@Override
+	public void updateHit(long id) throws Exception {
+		boardMapper.updateHit(id);
+	}
+
+	@Override
+	public void modifyPost(BoardDto board) throws Exception {
+		boardMapper.modifyPost(board);
+	}
+
+	@Override
+	public void deletePost(long id) throws Exception {
+		boardMapper.deletePost(id);
+	}
+
 
 }

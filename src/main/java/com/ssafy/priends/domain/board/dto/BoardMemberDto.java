@@ -23,7 +23,8 @@ public class BoardMemberDto {
 	private boolean isdeleted;
 	private String category;
 	private Long member_id;
-	
 	private String member_email;
 	private String member_name;
+
+	
 }

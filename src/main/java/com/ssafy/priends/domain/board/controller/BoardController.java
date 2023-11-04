@@ -1,95 +1,73 @@
 package com.ssafy.priends.domain.board.controller;
 
 import java.util.List;
-import java.util.Map;
 
-import javax.servlet.http.HttpSession;
-
+import com.ssafy.priends.global.common.dto.Message;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.ssafy.priends.domain.board.dto.BoardDto;
+import com.ssafy.priends.domain.board.dto.BoardMemberDto;
 import com.ssafy.priends.domain.board.service.BoardService;
-import com.ssafy.priends.domain.member.dto.MemberDto;
+
 
 @RestController
 @RequestMapping("/board")
+@RequiredArgsConstructor
 public class BoardController {
 	
-	private BoardService boardService;
+	private final BoardService boardService;
 
-	public BoardController(BoardService boardService) {
-		super();
-		this.boardService = boardService;
-	}
-	
- 
-	
-	// 동근오빠랑 합치고 세션추가해서 member_id 가져오기
+	// 멤버에서 토큰 보내주면 받아와서 boardDto에 넘겨줘야함
 	@PostMapping("/write")
-	public ResponseEntity<?> writePost(@RequestParam BoardDto board) throws Exception {
+	public ResponseEntity<Message<Void>> writePost( @RequestBody BoardDto boardDto ) throws Exception {
 //		MemberDto member = (MemberDto) session.getAttribute("userinfo");
 //		board.setUser_id(member.getId());
 		
-		boardService.writePost(board);
+		boardService.writePost(boardDto);
 		
-		return ResponseEntity.ok().body(0);  //0:성공 1:실패
+		return ResponseEntity.ok().body(Message.success()); //0:성공, 1:실패
 	}
-
-	
+ 
+	// category에 따라서 글 가져오기 -> category : 'NOTICE','FREE','PATH'
 	@GetMapping("/list")
-	public ModelAndView listPost(@RequestParam String category) throws Exception {
-		ModelAndView mav = new ModelAndView();
-		List<BoardDto> list = boardService.listPost(map);
-		mav.addObject("posts", list);
-		mav.setViewName("board/list");
-		return mav;
+	public ResponseEntity<Message<List<BoardMemberDto>>> listPost(@RequestParam String category) throws Exception {
+		List<BoardMemberDto> list = boardService.listPost(category);
+		return ResponseEntity.ok().body(Message.success(list));
 	}
 
-//	@GetMapping("/view")
-//	public String view(@RequestParam("id") int id, @RequestParam Map<String, String> map, Model model)
-//			throws Exception {
-//		BoardDto board= boardService.getPost(id);
-//		boardService.updateHit(id);
-//		model.addAttribute("post", board);
-//		return "board/view";
-//	}
-//
-//	@GetMapping("/modify")
-//	public String modify(@RequestParam("id") int id, @RequestParam Map<String, String> map, Model model)
-//			throws Exception {
-//		BoardDto board = boardService.getPost(id);
-//		model.addAttribute("post", board);
-//		return "board/modify";
-//	}
+	@GetMapping("/view")
+	public ResponseEntity<Message<BoardMemberDto>> getPost(@RequestParam("id") long id ) throws Exception {
+		System.out.println("id=" + id);
+		boardService.updateHit(id);
+		BoardMemberDto board = boardService.getPost(id);
+		return ResponseEntity.ok().body(Message.success(board));
+	}
 
-//	@PostMapping("/modify")
-//	public String modify(BoardDto boardDto, @RequestParam Map<String, String> map,
-//			RedirectAttributes redirectAttributes) throws Exception {
-//		logger.debug("modify boardDto : {}", boardDto);
-//		boardService.modifyArticle(boardDto);
-//		redirectAttributes.addAttribute("pgno", map.get("pgno"));
-//		redirectAttributes.addAttribute("key", map.get("key"));
-//		redirectAttributes.addAttribute("word", map.get("word"));
-//		return "redirect:/article/list";
-//	}
-//
-//	@GetMapping("/delete")
-//	public String delete(@RequestParam("articleno") int articleNo, @RequestParam Map<String, String> map,
-//			RedirectAttributes redirectAttributes) throws Exception {
-//		logger.debug("delete articleNo : {}", articleNo);
-////		boardService.deleteArticle(articleNo, servletContext.getRealPath(UPLOAD_PATH));
-//		boardService.deleteArticle(articleNo, uploadPath);
-//		redirectAttributes.addAttribute("pgno", map.get("pgno"));
-//		redirectAttributes.addAttribute("key", map.get("key"));
-//		redirectAttributes.addAttribute("word", map.get("word"));
-//		return "redirect:/article/list";
-//	}
+	@GetMapping("/modify")
+	public ResponseEntity<Message<BoardMemberDto>> modifyPost(@RequestParam("id") int id ) throws Exception {
+		BoardMemberDto board = boardService.getPost(id);
+		return ResponseEntity.ok().body(Message.success(board));
+	}
+
+	@PostMapping("/modify")
+	public ResponseEntity<Message<Void>> modifyPost(@RequestBody BoardDto board) throws Exception {
+		boardService.modifyPost(board);
+		return ResponseEntity.ok().body(Message.success());
+	}
+
+	@GetMapping("/delete")
+	public ResponseEntity<Message<Void>> deletePost(@RequestParam("id") Long id) throws Exception {
+		boardService.deletePost(id);
+		return ResponseEntity.ok().body(Message.success());
+	}
 }

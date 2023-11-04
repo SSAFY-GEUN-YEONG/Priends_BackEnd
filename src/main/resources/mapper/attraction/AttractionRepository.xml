@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper
+	namespace="com.ssafy.priends.domain.attraction.mapper.AttractionMapper">
+
+ 
+	<select id="searchAttractions"  >		
+			select * 
+			from attraction_info
+			where sido_code = #{area}  
+			<!-- {0:전체, 1:호텔/32, 2:음식점/39, 3:마켓/38, 4:문화생활/14.15, 5:액티비티/28, 6:자연/12.25 } -->
+			<choose>
+				<when test="typeid == 0"></when>
+				<when test="typeid == 1">and content_type_id = 32</when>
+				<when test="typeid == 2">and content_type_id = 39</when>
+				<when test="typeid == 3">and content_type_id = 38</when>
+				<when test="typeid == 4">and content_type_id in (14,15) </when>
+				<when test="typeid == 5">and content_type_id = 28</when>
+				<when test="typeid == 6">and content_type_id in (12, 25)</when>
+				
+			</choose>
+			<if test="keyword != null">
+				and title like '%${keyword}%'
+			</if>
+	</select>
+	
+	
+	<select id="getAttraction">
+	select i.content_id, i.title, i.addr1, i.addr2, i.latitude, i.longitude, i.first_image, i.sido_code, d.overview
+	from attraction_info i left join attraction_description d
+	on i.content_id = d.content_id
+	where i.content_id= #{attractionId};
+	</select>
+
+ 
+</mapper>
