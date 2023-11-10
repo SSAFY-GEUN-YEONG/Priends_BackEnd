@@ -1,14 +1,16 @@
 package com.ssafy.priends.domain.member.controller;
 
-import com.ssafy.priends.domain.member.dto.MemberDto;
-import com.ssafy.priends.domain.member.dto.MemberGetDto;
-import com.ssafy.priends.domain.member.dto.MemberInfoDto;
-import com.ssafy.priends.domain.member.dto.MemberLoginRequestDto;
+import com.ssafy.priends.domain.member.dto.*;
 import com.ssafy.priends.global.common.dto.MailCodeDto;
 import com.ssafy.priends.global.common.dto.Message;
+import com.ssafy.priends.global.component.jwt.dto.TokenDto;
+import com.ssafy.priends.global.component.jwt.dto.TokenMemberInfoDto;
+import com.ssafy.priends.global.component.jwt.service.JwtService;
 import com.ssafy.priends.global.infra.email.service.EmailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import com.ssafy.priends.domain.member.service.MemberService;
@@ -30,6 +32,8 @@ public class MemberController {
 
 	private final EmailService emailService;
 
+	private final JwtService jwtService;
+
 	@GetMapping("/{email}/check")
 	public ResponseEntity<Message<String>> emailCheckMember(@PathVariable("email") String memberEmail) {
 		int emailCheck = memberService.emailCheckMember(memberEmail);
@@ -43,14 +47,17 @@ public class MemberController {
 	}
 
 	@PutMapping("/update")
+	@PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
 	public ResponseEntity<Message<String>> updateMember(@RequestBody MemberDto memberDto) {
 		memberService.updateMember(memberDto);
 		return ResponseEntity.ok().body(Message.success("회원정보 수정 성공"));
 	}
 
-	@GetMapping("/{memberId}/get")
-	public ResponseEntity<Message<MemberGetDto>> getMember(@PathVariable("memberId") Long memberId) {
-		MemberGetDto memberGetDto = memberService.getMember(memberId);
+	@GetMapping("/get")
+	@PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
+	public ResponseEntity<Message<MemberGetDto>> getMember(
+			@AuthenticationPrincipal MemberLoginActiveDto memberLoginActiveDto) {
+		MemberGetDto memberGetDto = memberService.getMember(memberLoginActiveDto.getId());
 		return ResponseEntity.ok().body(Message.success(memberGetDto));
 	}
 
@@ -61,24 +68,35 @@ public class MemberController {
 	}
 
 	@PostMapping("/login")
-	public ResponseEntity<Message<MemberInfoDto>> loginMember(@RequestBody MemberLoginRequestDto memberLoginRequestDto, HttpSession httpSession, HttpServletResponse response) {
-		MemberInfoDto memberInfoDto = memberService.loginMember(memberLoginRequestDto);
-		httpSession.setAttribute("loginMember", memberLoginRequestDto);
+	public ResponseEntity<Message<MemberLoginResponseDto>> loginMember(@RequestBody MemberLoginRequestDto memberLoginRequestDto) {
+//		MemberInfoDto memberInfoDto = memberService.loginMember(memberLoginRequestDto);
+//		httpSession.setAttribute("loginMember", memberLoginRequestDto);
 		// 로그인 이메일 정보를 쿠키에 저장 (로그인 하기 전 이메일 저장)
-		Cookie loginEmailCookie = new Cookie("savedEmail", memberLoginRequestDto.getEmail());
-		loginEmailCookie.setMaxAge(60 * 60 * 24); // 쿠키의 유효기간을 24시간으로 설정
-		loginEmailCookie.setHttpOnly(true); // JavaScript를 통한 쿠키 접근 방지
+//		Cookie loginEmailCookie = new Cookie("savedEmail", memberLoginRequestDto.getEmail());
+//		loginEmailCookie.setMaxAge(60 * 60 * 24); // 쿠키의 유효기간을 24시간으로 설정
+//		loginEmailCookie.setHttpOnly(true); // JavaScript를 통한 쿠키 접근 방지
 //		loginIdCookie.setPath("/"); // 쿠키의 경로 설정
 //		loginIdCookie.setSecure(true); // HTTPS에서만 쿠키를 전송하려면 주석 해제
 
-		response.addCookie(loginEmailCookie);
-		return ResponseEntity.ok().body(Message.success(memberInfoDto));
+//		response.addCookie(loginEmailCookie);
+		TokenMemberInfoDto tokenMemberInfoDto = memberService.loginCheckMember(memberLoginRequestDto);
+		TokenDto tokenDto = jwtService.issueToken(tokenMemberInfoDto);
+		MemberLoginResponseDto memberLoginResponseDto = MemberLoginResponseDto.builder()
+				.memberInfo(tokenMemberInfoDto)
+				.token(tokenDto)
+				.build();
+
+		return ResponseEntity.ok().body(Message.success(memberLoginResponseDto));
 	}
 
-	@GetMapping("/logout")
-	public ResponseEntity<Message<String>> logoutMember(HttpSession httpSession) {
-//		httpSession.invalidate();
+	@GetMapping("/logout/")
+	@PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
+	public ResponseEntity<Message<String>> logoutMember() {
+		// 로그아웃 테스트 용으로 유저 이메일 던져줄거임
 		// 나중에 서비스단에서 logout 호출해서 redis에 저장된 token값 삭제해줘야함
+
+
+//		memberService.logoutMember(memberEmail);
 		return ResponseEntity.ok().body(Message.success("로그아웃 성공"));
 	}
 

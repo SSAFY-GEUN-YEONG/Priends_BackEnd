@@ -19,6 +19,8 @@ public interface MemberMapper {
 
 	void deleteMember(Long memberId);
 
+	MemberDto loginCheckMember(MemberLoginRequestDto memberLoginRequestDto);
+
 	MemberInfoDto loginMember(MemberLoginRequestDto memberLoginDto);
 
 	String getPasswordMember(Long memberId);
