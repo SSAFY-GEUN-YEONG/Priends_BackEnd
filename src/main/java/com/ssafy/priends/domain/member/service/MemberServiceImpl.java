@@ -6,6 +6,7 @@ import com.ssafy.priends.domain.member.dto.MemberLoginRequestDto;
 import com.ssafy.priends.global.component.jwt.dto.TokenMemberInfoDto;
 import com.ssafy.priends.global.component.jwt.repository.RefreshRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +24,8 @@ public class MemberServiceImpl implements MemberService {
 
 	private final MemberMapper memberMapper;
 
+	private final PasswordEncoder passwordEncoder;
+
 	private final RefreshRepository refreshRepository;
 	
 	// 이메일 중복 체크
@@ -35,6 +38,7 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public void signUpMember(MemberDto memberDto) {
 		memberDto.setStatus(false);
+		memberDto.setPassword(passwordEncoder.encode(memberDto.getPassword()));	// 패스워드 암호화 작업
 		memberMapper.signUpMember(memberDto);
 	}
 
@@ -64,6 +68,9 @@ public class MemberServiceImpl implements MemberService {
 		String realPassword = member.getPassword();
 
 		// 패스워드 디코딩 해서 비교하는 부분 추가하기
+		if(!passwordEncoder.matches(memberLoginRequestDto.getPassword(), realPassword)) {
+			throw new RuntimeException("패스워드가 맞지 않습니다.");
+		}
 
 		return TokenMemberInfoDto.builder()
 				.id(member.getId())

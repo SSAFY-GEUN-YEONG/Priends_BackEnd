@@ -9,6 +9,8 @@ import com.ssafy.priends.global.component.jwt.service.JwtService;
 import com.ssafy.priends.global.infra.email.service.EmailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import com.ssafy.priends.domain.member.service.MemberService;
@@ -45,14 +47,17 @@ public class MemberController {
 	}
 
 	@PutMapping("/update")
+	@PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
 	public ResponseEntity<Message<String>> updateMember(@RequestBody MemberDto memberDto) {
 		memberService.updateMember(memberDto);
 		return ResponseEntity.ok().body(Message.success("회원정보 수정 성공"));
 	}
 
-	@GetMapping("/{memberId}/get")
-	public ResponseEntity<Message<MemberGetDto>> getMember(@PathVariable("memberId") Long memberId) {
-		MemberGetDto memberGetDto = memberService.getMember(memberId);
+	@GetMapping("/get")
+	@PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
+	public ResponseEntity<Message<MemberGetDto>> getMember(
+			@AuthenticationPrincipal MemberLoginActiveDto memberLoginActiveDto) {
+		MemberGetDto memberGetDto = memberService.getMember(memberLoginActiveDto.getId());
 		return ResponseEntity.ok().body(Message.success(memberGetDto));
 	}
 
@@ -85,6 +90,7 @@ public class MemberController {
 	}
 
 	@GetMapping("/logout/")
+	@PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
 	public ResponseEntity<Message<String>> logoutMember() {
 		// 로그아웃 테스트 용으로 유저 이메일 던져줄거임
 		// 나중에 서비스단에서 logout 호출해서 redis에 저장된 token값 삭제해줘야함
