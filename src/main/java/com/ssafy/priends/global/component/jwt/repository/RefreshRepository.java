@@ -23,7 +23,6 @@ public class RefreshRepository {
 
     public Optional<String> find(String memberEmail) {
         String token = redisTemplate.opsForValue().get(KEY_PREFIX + memberEmail);
-
         return Optional.ofNullable(token);
     }
 

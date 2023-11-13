@@ -35,36 +35,35 @@ public class MemberController {
 	private final JwtService jwtService;
 
 	@GetMapping("/{email}/check")
-	public ResponseEntity<Message<String>> emailCheckMember(@PathVariable("email") String memberEmail) {
+	public ResponseEntity<Message<Void>> emailCheckMember(@PathVariable("email") String memberEmail) {
 		int emailCheck = memberService.emailCheckMember(memberEmail);
-		return ResponseEntity.ok().body(Message.success( "이메일 중복 여부(0=없음, 1= 있음): " + emailCheck));
+		return ResponseEntity.ok().body(Message.success());
 	}
 
 	@PostMapping("/signup")
-	public ResponseEntity<Message<String>> signUpMember(@RequestBody MemberDto memberDto) {
+	public ResponseEntity<Message<Void>> signUpMember(@RequestBody MemberDto memberDto) {
 		memberService.signUpMember(memberDto);
-		return ResponseEntity.ok().body(Message.success("회원가입 성공"));
+		return ResponseEntity.ok().body(Message.success());
 	}
 
 	@PutMapping("/update")
 	@PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
-	public ResponseEntity<Message<String>> updateMember(@RequestBody MemberDto memberDto) {
+	public ResponseEntity<Message<Void>> updateMember(@RequestBody MemberDto memberDto) {
 		memberService.updateMember(memberDto);
-		return ResponseEntity.ok().body(Message.success("회원정보 수정 성공"));
+		return ResponseEntity.ok().body(Message.success());
 	}
 
 	@GetMapping("/get")
 	@PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
-	public ResponseEntity<Message<MemberGetDto>> getMember(
-			@AuthenticationPrincipal MemberLoginActiveDto memberLoginActiveDto) {
+	public ResponseEntity<Message<MemberGetDto>> getMember(@AuthenticationPrincipal MemberLoginActiveDto memberLoginActiveDto) {
 		MemberGetDto memberGetDto = memberService.getMember(memberLoginActiveDto.getId());
 		return ResponseEntity.ok().body(Message.success(memberGetDto));
 	}
 
-	@PutMapping("/{memberId}/delete")
-	public ResponseEntity<Message<String>> deleteMember(@PathVariable("memberId") Long memberId) {
-		memberService.deleteMember(memberId);
-		return ResponseEntity.ok().body(Message.success("회원 탈퇴 성공"));
+	@PutMapping("/delete")
+	public ResponseEntity<Message<Void>> deleteMember(@AuthenticationPrincipal MemberLoginActiveDto memberLoginActiveDto) {
+		memberService.deleteMember(memberLoginActiveDto.getId());
+		return ResponseEntity.ok().body(Message.success());
 	}
 
 	@PostMapping("/login")
@@ -89,15 +88,11 @@ public class MemberController {
 		return ResponseEntity.ok().body(Message.success(memberLoginResponseDto));
 	}
 
-	@GetMapping("/logout/")
+	@GetMapping("/logout")
 	@PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
-	public ResponseEntity<Message<String>> logoutMember() {
-		// 로그아웃 테스트 용으로 유저 이메일 던져줄거임
-		// 나중에 서비스단에서 logout 호출해서 redis에 저장된 token값 삭제해줘야함
-
-
-//		memberService.logoutMember(memberEmail);
-		return ResponseEntity.ok().body(Message.success("로그아웃 성공"));
+	public ResponseEntity<Message<Void>> logoutMember(@AuthenticationPrincipal MemberLoginActiveDto memberLoginActiveDto) {
+		memberService.logoutMember(memberLoginActiveDto.getEmail());
+		return ResponseEntity.ok().body(Message.success());
 	}
 
 	@GetMapping("/{memberId}/password")
@@ -107,13 +102,23 @@ public class MemberController {
 	}
 
 	// 임시 비밀번호 재발급
-	@GetMapping("/{memberEmail}/temp/password")
-	public ResponseEntity<Message> sendTempPassword(@PathVariable("memberEmail") String memberEmail) {
-		// 먼저 db에 사용자 이메일이 저장되어 있는지 확인하기
-
-		MailCodeDto mailCodeDto = emailService.sendSimpleMessage(memberEmail, false);
+	@GetMapping("/temp/password")
+	@PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
+	public ResponseEntity<Message<Void>> sendTempPassword(@AuthenticationPrincipal MemberLoginActiveDto memberLoginActiveDto) {
+		MailCodeDto mailCodeDto = emailService.sendSimpleMessage(memberLoginActiveDto.getEmail(), false);
 		// 여기에 임시 비밀번호 재발급 하는 service 부르기
+
+
 		return ResponseEntity.ok().body(Message.success());
 	}
+
+	// Refresh 토큰 Redis에 저장되어 있는지 확인해서 AccessToken 재발급 받는 API (Access 토큰 만료 됐을 시 프론트쪽에서 한번 더 부를 API)
+	@GetMapping("/token/redis")
+	@PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
+	public ResponseEntity<Message<Void>> refreshTokenCheck(@AuthenticationPrincipal MemberLoginActiveDto memberLoginActiveDto) {
+		jwtService.reissueToken(memberLoginActiveDto.getEmail());
+		return ResponseEntity.ok().body(Message.success());
+	}
+
 
 }

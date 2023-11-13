@@ -1,5 +1,7 @@
 package com.ssafy.priends.global.component.jwt;
 
+import com.ssafy.priends.global.exception.GlobalError;
+import com.ssafy.priends.global.exception.TokenException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -25,7 +27,7 @@ public class JwtParser {
                     .parseClaimsJws(token).getBody();
         } catch (Exception e) {
             // 나중에 Exception 처리 해줘야함
-            throw new RuntimeException("유효하지 않은 토큰입니다.");
+            throw new TokenException(GlobalError.INVALID_TOKEN);
         }
 
         return claims;
