@@ -3,6 +3,8 @@ package com.ssafy.priends.global.component.jwt.security;
 import com.ssafy.priends.domain.member.dto.MemberLoginActiveDto;
 import com.ssafy.priends.global.component.jwt.dto.TokenMemberInfoDto;
 import com.ssafy.priends.global.component.jwt.service.JwtService;
+import com.ssafy.priends.global.exception.GlobalError;
+import com.ssafy.priends.global.exception.TokenException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -23,8 +25,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     public static final String AUTHORIZATION_HEADER = "Authorization";
     public static final String BEARER_PREFIX = "Bearer ";
-
-    public  static final String REFRESH_HEADER = "Refresh";
 
     private final JwtService jwtService;
 
@@ -59,7 +59,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 saveLoginMemberInSecurityContext(loginActiveDto);
             } catch(RuntimeException e) {
                 SecurityContextHolder.clearContext();
-                throw new RuntimeException("INVALID_TOKEN", e);
+                throw new TokenException(GlobalError.INVALID_TOKEN);
             }
         }
     }

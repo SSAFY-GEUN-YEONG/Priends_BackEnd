@@ -3,6 +3,8 @@ package com.ssafy.priends.domain.member.service;
 import com.ssafy.priends.domain.member.dto.MemberGetDto;
 import com.ssafy.priends.domain.member.dto.MemberInfoDto;
 import com.ssafy.priends.domain.member.dto.MemberLoginRequestDto;
+import com.ssafy.priends.domain.member.exception.MemberError;
+import com.ssafy.priends.domain.member.exception.MemberException;
 import com.ssafy.priends.global.component.jwt.dto.TokenMemberInfoDto;
 import com.ssafy.priends.global.component.jwt.repository.RefreshRepository;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +33,11 @@ public class MemberServiceImpl implements MemberService {
 	// 이메일 중복 체크
 	@Override
 	public int emailCheckMember(String memberEmail) {
-		return memberMapper.emailCheckMember(memberEmail);
+		int emailCheck = memberMapper.emailCheckMember(memberEmail);
+		if(emailCheck == 1) {
+			throw new MemberException(MemberError.EXIST_MEMBER_EMAIL);
+		}
+		return emailCheck;
 	}
 
 	// 회원가입 처리
@@ -44,17 +50,29 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	public void updateMember(MemberDto memberDto) {
+		MemberGetDto memberGetDto = memberMapper.getMember(memberDto.getId());
+		if(memberGetDto == null) {
+			throw new MemberException(MemberError.NOT_EXIST_MEMBER);
+		}
 		memberMapper.updateMember(memberDto);
 	}
 
 	@Override
 	public MemberGetDto getMember(Long memberId) {
-		return memberMapper.getMember(memberId);
+		MemberGetDto memberGetDto = memberMapper.getMember(memberId);
+		if(memberGetDto == null) {
+			throw new MemberException(MemberError.NOT_EXIST_MEMBER);
+		}
+		return memberGetDto;
 	}
 
 	@Override
 	public void deleteMember(Long memberId) {
-		memberMapper.deleteMember(memberId);
+		try {
+			memberMapper.deleteMember(memberId);
+		} catch (Exception e) {
+			throw new MemberException(MemberError.NOT_EXIST_MEMBER);
+		}
 	}
 
 	@Override
@@ -63,13 +81,13 @@ public class MemberServiceImpl implements MemberService {
 		// 2. passwordEncoder로 패스워드 암호화 한거 db랑 확인한 뒤 일치하면 로그인 성공하게끔 처리해줘야함
 		MemberDto member = memberMapper.loginCheckMember(memberLoginRequestDto);
 		if(member == null) {
-			throw new RuntimeException("해당 이메일을 가진 회원이 존재하지 않습니다.");
+			throw new MemberException(MemberError.NOT_FOUND_MEMBER);
 		}
 		String realPassword = member.getPassword();
 
 		// 패스워드 디코딩 해서 비교하는 부분 추가하기
 		if(!passwordEncoder.matches(memberLoginRequestDto.getPassword(), realPassword)) {
-			throw new RuntimeException("패스워드가 맞지 않습니다.");
+			throw new MemberException(MemberError.NOT_MATCH_PASSWORD);
 		}
 
 		return TokenMemberInfoDto.builder()
@@ -92,7 +110,7 @@ public class MemberServiceImpl implements MemberService {
 		try {
 			refreshRepository.delete(memberEmail);
 		} catch(Exception e) {
-			throw new RuntimeException("이미 로그아웃 된 상태입니다.");
+			throw new MemberException(MemberError.ALREADY_MEMBER_LOGOUT);
 		}
 	}
 

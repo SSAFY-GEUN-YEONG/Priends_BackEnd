@@ -6,6 +6,8 @@ import com.ssafy.priends.global.component.jwt.JwtUtils;
 import com.ssafy.priends.global.component.jwt.dto.TokenDto;
 import com.ssafy.priends.global.component.jwt.dto.TokenMemberInfoDto;
 import com.ssafy.priends.global.component.jwt.repository.RefreshRepository;
+import com.ssafy.priends.global.exception.GlobalError;
+import com.ssafy.priends.global.exception.TokenException;
 import io.jsonwebtoken.Claims;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -57,19 +59,11 @@ public class JwtServiceImpl implements JwtService {
     }
 
     @Override
-    public TokenDto reissueToken(@NonNull String refreshToken) {
-        return null;
+    public TokenDto reissueToken(@NonNull String memberEmail) {
+        String refreshToken = refreshRepository.find(memberEmail)
+                .orElseThrow(() -> new TokenException(GlobalError.REDIS_NOT_TOKEN));
+        Claims claims = jwtParser.parseToken(refreshToken, jwtUtils.getEncodedRefreshKey());
+        return issueToken(TokenMemberInfoDto.from(claims));
     }
 
-
-    // redisTemplate을 통해 Refresh 토큰 삭제 (블랙리스트 추가) -> 로그아웃시 이용
-    @Override
-    public void deleteRefreshToken(String memberEmail) {
-        refreshRepository.delete(memberEmail);
-    }
-
-    @Override
-    public TokenMemberInfoDto decryptionRefreshToken(String refreshToken) {
-        return null;
-    }
 }

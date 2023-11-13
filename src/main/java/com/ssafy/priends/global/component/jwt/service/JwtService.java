@@ -11,12 +11,7 @@ public interface JwtService {
     // access 토큰 파싱
     TokenMemberInfoDto parseAccessToken(@NonNull String accessToken);
 
-    // RefreshToken을 이용한 Access, Refresh 토큰 재발급
-    TokenDto reissueToken(@NonNull String refreshToken);
+    // Redis에 저장된 이메일을 통한 Access, Refresh 토큰 재발급
+    TokenDto reissueToken(@NonNull String memberEmail);
 
-    // 회원의 이메일을 이용한 redis에 해당 유저의 Refresh 토큰 삭제 (로그아웃 시 이용)
-    void deleteRefreshToken(String memberEmail);
-
-    // Refresh 토큰을 이용한 토큰 복호화 작업
-    TokenMemberInfoDto decryptionRefreshToken(String refreshToken);
 }
