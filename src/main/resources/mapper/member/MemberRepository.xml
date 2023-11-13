@@ -37,6 +37,13 @@
 		where id = #{id}
 	</update>
 
+	<!-- 이메일을 통한 로그인 시 해당 회원 정보 가져오기 -->
+	<select id="loginCheckMember" parameterType="memberLoginRequestDto" resultType="memberDto">
+		select id, email, password, name, status, alarm, role
+		from members
+		where email = #{email}
+	</select>
+
 	<!-- 이메일을 통한 로그인 시 해당 회원 고유 아이디(PK) 가져오기 -->
 	<!-- 나중에 수정해줘야함! (password 부분 빼고 service단에서 passwordEncoder로 확인하기 -->
 	<select id="loginMember" parameterType="memberLoginRequestDto" resultType="memberInfoDto">

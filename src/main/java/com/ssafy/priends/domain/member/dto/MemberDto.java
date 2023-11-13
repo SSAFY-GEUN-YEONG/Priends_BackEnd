@@ -1,5 +1,6 @@
 package com.ssafy.priends.domain.member.dto;
 
+import com.ssafy.priends.domain.member.dto.enums.MemberRole;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,5 +17,5 @@ public class MemberDto {
 	private String name;
 	private boolean status;
 	private boolean alarm;
-	private String role;
+	private MemberRole role;
 }
