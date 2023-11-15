@@ -51,8 +51,8 @@ public class PathController {
 
     @GetMapping("/detail/get/list/{pathId}")
     @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
-    public ResponseEntity<Message<List<PathDetailDto>>> getPathDetailList(@PathVariable("pathId") Long pathId) {
-        List<PathDetailDto> pathDetails = pathService.getPathDetailList(pathId);
+    public ResponseEntity<Message<List<PathDetailWithAttractionDto>>> getPathDetailList(@PathVariable("pathId") Long pathId) {
+        List<PathDetailWithAttractionDto> pathDetails = pathService.getPathDetailsWithAttraction(pathId);
         return ResponseEntity.ok().body(Message.success(pathDetails));
     }
 

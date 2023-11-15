@@ -79,7 +79,7 @@ public class PathServiceImpl implements PathService {
         }
 
         // 기존 상세 경로를 가져옴
-        List<PathDetailDto> existingDetails = pathMapper.getPathDetails(pathId);
+        List<PathDetailDto> existingDetails = pathMapper.getSimplePathDetails(pathId);
 
         // dto를 id 기반으로 맵에 저장
         Map<Long, PathDetailDto> existingDetailsMap = existingDetails.stream()
@@ -105,9 +105,9 @@ public class PathServiceImpl implements PathService {
     }
 
     @Override
-    public List<PathDetailDto> getPathDetailList(Long pathId) {
+    public List<PathDetailWithAttractionDto> getPathDetailsWithAttraction(Long pathId) {
         // 기존 상세 경로를 가져옴
-        return pathMapper.getPathDetails(pathId);
+        return pathMapper.getPathDetailsWithAttraction(pathId);
     }
 
     private void createNewPathDetail(Long pathId, PathDetailInsertRequestDto newPathDetail) {
