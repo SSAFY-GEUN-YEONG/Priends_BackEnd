@@ -1,6 +1,7 @@
 package com.ssafy.priends.domain.path.mapper;
 
 import com.ssafy.priends.domain.path.dto.PathDetailDto;
+import com.ssafy.priends.domain.path.dto.PathDetailWithAttractionDto;
 import com.ssafy.priends.domain.path.dto.PathDto;
 import com.ssafy.priends.domain.path.dto.PathGetDto;
 import org.apache.ibatis.annotations.Mapper;
@@ -20,11 +21,13 @@ public interface PathMapper {
     // 여행 경로 상세 부분
     void createListPathDetails(List<PathDetailDto> pathDetailDtoList);
 
-    List<PathDetailDto> getPathDetails(Long pathId);
+    List<PathDetailDto> getSimplePathDetails(Long pathId);
 
     void createPathDetail(PathDetailDto pathDetail);
 
     void updatePathDetail(PathDetailDto pathDetail);
 
     void deletePathDetail(Long id);
+
+    List<PathDetailWithAttractionDto> getPathDetailsWithAttraction(Long pathId);
 }

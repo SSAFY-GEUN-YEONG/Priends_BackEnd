@@ -20,5 +20,5 @@ public interface PathService {
     // 여행 경로 상세 생성 (클라이언트단에서 경로 상세 추가 및 삭제시 같이 반영되게끔)
     void createAndUpdatePathDetails(Long pathId, List<PathDetailInsertRequestDto> newPathDetails);
 
-    List<PathDetailDto> getPathDetailList(Long pathId);
+    List<PathDetailWithAttractionDto> getPathDetailsWithAttraction(Long pathId);
 }

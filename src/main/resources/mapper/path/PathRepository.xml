@@ -15,6 +15,24 @@
         <result property="pathId" column="path_id"></result>
     </resultMap>
 
+    <!-- 기존 여행 경로 상세와 관광지 정보를 조인한 결과를 매핑 할 수 있게끔 -->
+    <resultMap id="pathDetailAttractionResultMap" type="com.ssafy.priends.domain.path.dto.PathDetailWithAttractionDto">
+        <id property="id" column="id"></id>
+        <result property="orders" column="orders"></result>
+        <result property="day" column="day"></result>
+        <result property="contentId" column="content_id"></result>
+        <result property="pathId" column="path_id"></result>
+        <result property="title" column="title"></result>
+        <result property="address" column="addr1"></result>
+        <result property="zipcode" column="zipcode"></result>
+        <result property="image1" column="image1"></result>
+        <result property="image2" column="image2"></result>
+        <result property="sidoCode" column="sido_code"></result>
+        <result property="gugunCode" column="gugun_code"></result>
+        <result property="latitude" column="latitude"></result>
+        <result property="longitude" column="longitude"></result>
+    </resultMap>
+
     <!-- isEnd(여행 완료 여부)와 createdAt(생성 날짜), hit(조회수)는 default값으로 설정되어 있어서 insert 할 때 넣을 필요 없음-->
     <!-- useGeneratedKeys와 keyProperty 속성을 사용하여 여행경로를 생성한 이후 해당 속성을 바로 사용 가능 -->
     <insert id="createPath" parameterType="pathDto" useGeneratedKeys="true" keyProperty="id">
@@ -51,8 +69,8 @@
         </foreach>
     </insert>
 
-    <!-- 기존 상세 경로 가져오기 -->
-    <select id="getPathDetails" resultMap="pathDetailResultMap">
+    <!-- 기존 상세 경로 가져오기 (상세 경로 생성 할 때 사용할 쿼리) -->
+    <select id="getSimplePathDetails" resultMap="pathDetailResultMap">
         select id, orders, day, content_id, path_id
         from path_details
         where path_id = #{path_id}
