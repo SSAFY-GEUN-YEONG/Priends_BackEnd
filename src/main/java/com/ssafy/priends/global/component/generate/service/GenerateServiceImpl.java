@@ -1,4 +1,4 @@
-package com.ssafy.priends.global.component.alarm.service;
+package com.ssafy.priends.global.component.generate.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -14,7 +14,7 @@ import java.util.HashMap;
 
 @Service
 @RequiredArgsConstructor
-public class AlarmServiceImpl implements AlarmService {
+public class GenerateServiceImpl implements GenerateService {
 
     private final JavaMailSender mailSender;
     private final TemplateEngine templateEngine;

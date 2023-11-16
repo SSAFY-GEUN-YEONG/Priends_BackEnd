@@ -16,7 +16,8 @@ public class JwtUtils {
     public static final String BEARER_PREFIX = "Bearer ";
     public static final String KEY_ID = "id";
     public static final String KEY_EMAIL = "email";
-    public static final String KEY_NAME = "name";
+    public static final String KEY_NICKNAME = "nickname";
+    public static final String KEY_IMAGE = "image";
     public static final String KEY_ALARM = "alarm";
     public static final String KEY_ROLE = "role";
 

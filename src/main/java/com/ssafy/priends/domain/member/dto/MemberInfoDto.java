@@ -10,7 +10,8 @@ import lombok.NoArgsConstructor;
 public class MemberInfoDto {
     Long id;
     String email;
-    String name;
+    String nickname;
+    String image;
     String alarm;
     String role;
 }

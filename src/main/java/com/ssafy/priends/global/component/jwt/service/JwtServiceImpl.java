@@ -37,8 +37,13 @@ public class JwtServiceImpl implements JwtService {
                 tokenMemberInfoDto.toClaims(jwtUtils.getRefreshTokenExpiredMin()), jwtUtils.getEncodedRefreshKey()
         );
 
-        // refreshToekn redis에 저장
-        refreshRepository.save(tokenMemberInfoDto.getEmail(), refreshToken, jwtUtils.getRefreshTokenExpiredMin());
+        try {
+            // refreshToekn redis에 저장
+            refreshRepository.save(tokenMemberInfoDto.getEmail(), refreshToken, jwtUtils.getRefreshTokenExpiredMin());
+        }
+        catch (Exception e) {
+            throw new RuntimeException("Redis 연결에 실패했습니다.");
+        }
 
         return TokenDto.builder()
                 .accessToken(accessToken)
