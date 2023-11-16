@@ -9,7 +9,7 @@
         <result property="startDate" column="start_date"></result>
         <result property="endDate" column="end_date"></result>
     </resultMap>
-    
+
     <resultMap id="pathDetailResultMap" type="com.ssafy.priends.domain.path.dto.PathDetailDto">
         <result property="contentId" column="content_id"></result>
         <result property="pathId" column="path_id"></result>
@@ -25,8 +25,8 @@
         <result property="title" column="title"></result>
         <result property="address" column="addr1"></result>
         <result property="zipcode" column="zipcode"></result>
-        <result property="image1" column="image1"></result>
-        <result property="image2" column="image2"></result>
+        <result property="image1" column="first_image"></result>
+        <result property="image2" column="first_image2"></result>
         <result property="sidoCode" column="sido_code"></result>
         <result property="gugunCode" column="gugun_code"></result>
         <result property="latitude" column="latitude"></result>
@@ -44,7 +44,7 @@
         select id, title, content, hit, is_end, createdAt, start_date, end_Date
         from path
         where member_id = #{memberId}
-        and is_deleted = false
+          and is_deleted = false
         order by createdAt;
     </select>
 
@@ -95,4 +95,13 @@
         delete from path_details
         where id = #{id}
     </delete>
+
+    <!-- 여행 상세 경로를 불러올 때 여행 상세 경로와 관광지 정보를 조인해서 가져오도록 하기 -->
+    <select id="getPathDetailsWithAttraction" parameterType="Long" resultMap="pathDetailAttractionResultMap">
+        select pd.id, pd.orders, pd.day, pd.content_id, pd.path_id,
+               ai.title, ai.addr1, ai.zipcode, ai.first_image, ai.first_image2, ai.sido_code, ai.gugun_code, ai.latitude, ai.longitude
+        from path_details pd join attraction_info ai
+                                  on pd.content_id = ai.content_id
+        where pd.path_id = #{pathId}
+    </select>
 </mapper>
