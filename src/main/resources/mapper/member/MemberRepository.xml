@@ -14,19 +14,19 @@
 	<!-- ID값은 AUTO_INCREMENT로 생성된 PK값이므로 -->
 	<!-- useGeneratedKeys와 keyProperty 속성을 사용하여 회원가입 이후 해당 속성을 바로 사용 가능 -->
 	<insert id="signUpMember" parameterType="memberDto" useGeneratedKeys="true" keyProperty="id">
-    	insert into members (email, password, name, status, alarm, role)
-    	values (#{email}, #{password}, #{name}, #{status}, #{alarm}, #{role})
+    	insert into members (email, password, nickname, image, status, alarm, role)
+    	values (#{email}, #{password}, #{nickname}, #{image}, #{status}, #{alarm}, #{role})
 	</insert>
 
 	<!-- 회원정보 수정 -->
 	<update id="updateMember" parameterType="memberDto">
-		update members set password = #{password}, name = #{name}, alarm = #{alarm}
+		update members set password = #{password}, name = #{nickname}, alarm = #{alarm}
 		where id = #{id}
 	</update>
 
 	<!-- 회원정보 조회-->
 	<select id="getMember" parameterType="Long" resultType="memberGetDto">
-		select email, name, alarm
+		select email, nickname, image, alarm
 		from members
 		where id = #{id}
 	</select>
@@ -39,20 +39,10 @@
 
 	<!-- 이메일을 통한 로그인 시 해당 회원 정보 가져오기 -->
 	<select id="loginCheckMember" parameterType="memberLoginRequestDto" resultType="memberDto">
-		select id, email, password, name, status, alarm, role
+		select id, email, password, nickname, image, status, alarm, role
 		from members
 		where email = #{email}
 	</select>
-
-	<!-- 이메일을 통한 로그인 시 해당 회원 고유 아이디(PK) 가져오기 -->
-	<!-- 나중에 수정해줘야함! (password 부분 빼고 service단에서 passwordEncoder로 확인하기 -->
-	<select id="loginMember" parameterType="memberLoginRequestDto" resultType="memberInfoDto">
-		select id, email, name, alarm, role
-		from members
-		where email = #{email}
-		and password = #{password}
-	</select>
-
 
 	<!-- 비밀번호 찾기  -->
 	<!-- 나중에 수정해줘야함! (지금은 비밀번호 찾기지만 임시비밀번호 이메일로 발송하는 기능으로 수정 예정 -->

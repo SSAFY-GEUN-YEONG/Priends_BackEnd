@@ -11,7 +11,7 @@ import lombok.*;
 public class MemberLoginActiveDto {
     private Long id;
     private String email;
-    private String name;
+    private String nickname;
     private boolean alarm;
     private String role;
 
@@ -19,7 +19,7 @@ public class MemberLoginActiveDto {
         return MemberLoginActiveDto.builder()
                 .id(info.getId())
                 .email(info.getEmail())
-                .name(info.getName())
+                .nickname(info.getNickname())
                 .alarm(info.isAlarm())
                 .role(info.getRole())
                 .build();

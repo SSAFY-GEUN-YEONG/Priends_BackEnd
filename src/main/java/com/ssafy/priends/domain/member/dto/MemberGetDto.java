@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class MemberGetDto {
     String email;
-    String name;
+    String nickname;
+    String image;
     String alarm;
 }

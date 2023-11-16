@@ -20,7 +20,8 @@ import static com.ssafy.priends.global.component.jwt.JwtUtils.*;
 public class TokenMemberInfoDto {
     private Long id;
     private String email;
-    private String name;
+    private String nickname;
+    private String image;
     private boolean alarm;
     private String role;
 
@@ -31,7 +32,8 @@ public class TokenMemberInfoDto {
 
         claims.put(KEY_ID, this.id);
         claims.put(KEY_EMAIL, this.email);
-        claims.put(KEY_NAME, this.name);
+        claims.put(KEY_NICKNAME, this.nickname);
+        claims.put(KEY_IMAGE, this.image);
         claims.put(KEY_ALARM, this.alarm);
         claims.put(KEY_ROLE, this.role);
         claims.setExpiration(new Date(now.getTime() + expiresMin * ONE_MINUTE));
@@ -44,7 +46,8 @@ public class TokenMemberInfoDto {
         return TokenMemberInfoDto.builder()
                 .id(claims.get(KEY_ID, Long.class))
                 .email(claims.get(KEY_EMAIL, String.class))
-                .name(claims.get(KEY_NAME, String.class))
+                .nickname(claims.get(KEY_NICKNAME, String.class))
+                .image(claims.get(KEY_IMAGE, String.class))
                 .alarm(claims.get(KEY_ALARM, Boolean.class))
                 .role(claims.get(KEY_ROLE, String.class))
                 .build();

@@ -1,7 +1,7 @@
 package com.ssafy.priends.global.infra.email.service;
 
 import com.ssafy.priends.global.common.dto.MailCodeDto;
-import com.ssafy.priends.global.component.alarm.service.AlarmService;
+import com.ssafy.priends.global.component.generate.service.GenerateService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.MailException;
 import org.springframework.stereotype.Service;
@@ -12,12 +12,12 @@ import java.util.Random;
 @RequiredArgsConstructor
 public class EmailServiceImpl implements EmailService {
 
-    private final AlarmService alarmService;
+    private final GenerateService alarmService;
 
     private static final int EXPIRES_MIN = 30;  // 인증코드 인증 제한시간 30분
 
     @Override
-    public MailCodeDto sendSimpleMessage(java.lang.String to, boolean signUpCheck) {
+    public MailCodeDto sendSimpleMessage(String to, boolean signUpCheck) {
         String ePw = createKey();
 
         try {
@@ -38,7 +38,7 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public void signUpCheck(java.lang.String memberEmail, java.lang.String requestSignUpCode) {
+    public void signUpCheck(String memberEmail, String requestSignUpCode) {
 
     }
 
@@ -59,7 +59,7 @@ public class EmailServiceImpl implements EmailService {
     }
 
     private String createKey() {
-        StringBuffer key = new StringBuffer();
+        StringBuilder key = new StringBuilder();
         Random random = new Random();
 
         for(int i=0; i<8; i++) {

@@ -15,12 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.ssafy.priends.domain.member.service.MemberService;
 
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping("/member")
@@ -68,16 +63,7 @@ public class MemberController {
 
 	@PostMapping("/login")
 	public ResponseEntity<Message<MemberLoginResponseDto>> loginMember(@RequestBody MemberLoginRequestDto memberLoginRequestDto) {
-//		MemberInfoDto memberInfoDto = memberService.loginMember(memberLoginRequestDto);
-//		httpSession.setAttribute("loginMember", memberLoginRequestDto);
-		// 로그인 이메일 정보를 쿠키에 저장 (로그인 하기 전 이메일 저장)
-//		Cookie loginEmailCookie = new Cookie("savedEmail", memberLoginRequestDto.getEmail());
-//		loginEmailCookie.setMaxAge(60 * 60 * 24); // 쿠키의 유효기간을 24시간으로 설정
-//		loginEmailCookie.setHttpOnly(true); // JavaScript를 통한 쿠키 접근 방지
-//		loginIdCookie.setPath("/"); // 쿠키의 경로 설정
-//		loginIdCookie.setSecure(true); // HTTPS에서만 쿠키를 전송하려면 주석 해제
 
-//		response.addCookie(loginEmailCookie);
 		TokenMemberInfoDto tokenMemberInfoDto = memberService.loginCheckMember(memberLoginRequestDto);
 		TokenDto tokenDto = jwtService.issueToken(tokenMemberInfoDto);
 		MemberLoginResponseDto memberLoginResponseDto = MemberLoginResponseDto.builder()
