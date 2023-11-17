@@ -23,8 +23,9 @@ public class PathController {
 
     @PostMapping("/create")
     @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
-    public ResponseEntity<Message<Long>> createPath(@RequestBody PathInsertRequestDto pathInsertRequestDto) {
-        Long createdPathId = pathService.createPath(pathInsertRequestDto);
+    public ResponseEntity<Message<Long>> createPath(@RequestBody PathInsertRequestDto pathInsertRequestDto,
+                                                    @AuthenticationPrincipal MemberLoginActiveDto memberLoginActiveDto) {
+        Long createdPathId = pathService.createPath(pathInsertRequestDto, memberLoginActiveDto.getId());
         return ResponseEntity.ok().body(Message.success(createdPathId));
     }
 

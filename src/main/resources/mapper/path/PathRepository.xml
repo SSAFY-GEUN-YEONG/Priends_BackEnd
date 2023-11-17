@@ -61,19 +61,20 @@
     </update>
 
     <!-- 동적 쿼리 이용한 상세 경로 여러개 생성 -->
-    <insert id="createListPathDetails" parameterType="java.util.List">
-        insert into path_details (orders, day, content_id, path_id)
-        values
-        <foreach collection="list" item="detail" separator=",">
-            (#{detail.orders}, #{detail.day}, #{detail.contentId}, #{detail.pathId})
-        </foreach>
-    </insert>
+<!--    <insert id="createListPathDetails" parameterType="java.util.List">-->
+<!--        insert into path_details (orders, day, content_id, path_id)-->
+<!--        values-->
+<!--        <foreach collection="list" item="detail" separator=",">-->
+<!--            (#{detail.orders}, #{detail.day}, #{detail.contentId}, #{detail.pathId})-->
+<!--        </foreach>-->
+<!--    </insert>-->
 
     <!-- 기존 상세 경로 가져오기 (상세 경로 생성 할 때 사용할 쿼리) -->
     <select id="getSimplePathDetails" resultMap="pathDetailResultMap">
         select id, orders, day, content_id, path_id
         from path_details
         where path_id = #{path_id}
+        order by orders
     </select>
 
     <!-- 새로운 상세 경로 삽입 -->

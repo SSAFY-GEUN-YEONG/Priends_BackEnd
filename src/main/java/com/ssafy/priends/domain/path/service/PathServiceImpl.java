@@ -23,7 +23,7 @@ public class PathServiceImpl implements PathService {
     private final PathMapper pathMapper;
 
     @Override
-    public Long createPath(PathInsertRequestDto pathInsertRequestDto) {
+    public Long createPath(PathInsertRequestDto pathInsertRequestDto, Long memberId) {
         LocalDate startDate = LocalDate.parse(pathInsertRequestDto.getStartDate(), DateTimeFormatter.ISO_LOCAL_DATE);
         LocalDate endDate = LocalDate.parse(pathInsertRequestDto.getEndDate(), DateTimeFormatter.ISO_LOCAL_DATE);
 
@@ -32,7 +32,7 @@ public class PathServiceImpl implements PathService {
                 .content(pathInsertRequestDto.getContent())
                 .startDate(startDate)
                 .endDate(endDate)
-                .memberId(pathInsertRequestDto.getMemberId())
+                .memberId(memberId)
                 .build();
 
         pathMapper.createPath(path);
