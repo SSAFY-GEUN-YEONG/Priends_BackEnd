@@ -8,7 +8,6 @@ public class PriendsBackEndApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(PriendsBackEndApplication.class, args);
-		System.out.println("test");
 	}
 
 }

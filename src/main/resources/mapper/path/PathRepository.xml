@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.priends.domain.path.mapper.PathMapper">
+
+    <resultMap id="pathResultMap" type="com.ssafy.priends.domain.path.dto.PathGetDto">
+        <result property="isEnd" column="is_end"></result>
+        <result property="startDate" column="start_date"></result>
+        <result property="endDate" column="end_date"></result>
+    </resultMap>
+
+    <resultMap id="pathDetailResultMap" type="com.ssafy.priends.domain.path.dto.PathDetailDto">
+        <result property="contentId" column="content_id"></result>
+        <result property="pathId" column="path_id"></result>
+    </resultMap>
+
+    <!-- 기존 여행 경로 상세와 관광지 정보를 조인한 결과를 매핑 할 수 있게끔 -->
+    <resultMap id="pathDetailAttractionResultMap" type="com.ssafy.priends.domain.path.dto.PathDetailWithAttractionDto">
+        <id property="id" column="id"></id>
+        <result property="orders" column="orders"></result>
+        <result property="day" column="day"></result>
+        <result property="contentId" column="content_id"></result>
+        <result property="pathId" column="path_id"></result>
+        <result property="title" column="title"></result>
+        <result property="address" column="addr1"></result>
+        <result property="zipcode" column="zipcode"></result>
+        <result property="image1" column="first_image"></result>
+        <result property="image2" column="first_image2"></result>
+        <result property="sidoCode" column="sido_code"></result>
+        <result property="gugunCode" column="gugun_code"></result>
+        <result property="latitude" column="latitude"></result>
+        <result property="longitude" column="longitude"></result>
+    </resultMap>
+
+    <!-- isEnd(여행 완료 여부)와 createdAt(생성 날짜), hit(조회수)는 default값으로 설정되어 있어서 insert 할 때 넣을 필요 없음-->
+    <!-- useGeneratedKeys와 keyProperty 속성을 사용하여 여행경로를 생성한 이후 해당 속성을 바로 사용 가능 -->
+    <insert id="createPath" parameterType="pathDto" useGeneratedKeys="true" keyProperty="id">
+        insert into path (title, content, start_date, end_date, member_id)
+        values (#{title}, #{content}, #{startDate}, #{endDate}, #{memberId})
+    </insert>
+
+    <select id="getPathList" parameterType="Long" resultMap="pathResultMap">
+        select id, title, content, hit, is_end, createdAt, start_date, end_Date
+        from path
+        where member_id = #{memberId}
+          and is_deleted = false
+        order by createdAt;
+    </select>
+
+    <update id="updatePath" parameterType="pathDto">
+        update path
+        set title = #{title}, content = #{content}, is_end = #{isEnd}, start_date = #{startDate}, end_date = #{endDate}
+        where id = #{id}
+    </update>
+
+    <!-- 여행 경로 삭제 (여행경로 삭제하면 다른 테이블과 외래키로 묶여있여서 삭제는 안하고 삭제 여부를 나타내는 컬럼인 is_deleted 상태만 변경 -->
+    <update id="deletePath" parameterType="Long">
+        update path set is_deleted = true
+        where id = #{id}
+    </update>
+
+    <!-- 동적 쿼리 이용한 상세 경로 여러개 생성 -->
+<!--    <insert id="createListPathDetails" parameterType="java.util.List">-->
+<!--        insert into path_details (orders, day, content_id, path_id)-->
+<!--        values-->
+<!--        <foreach collection="list" item="detail" separator=",">-->
+<!--            (#{detail.orders}, #{detail.day}, #{detail.contentId}, #{detail.pathId})-->
+<!--        </foreach>-->
+<!--    </insert>-->
+
+    <!-- 기존 상세 경로 가져오기 (상세 경로 생성 할 때 사용할 쿼리) -->
+    <select id="getSimplePathDetails" resultMap="pathDetailResultMap">
+        select id, orders, day, content_id, path_id
+        from path_details
+        where path_id = #{path_id}
+        order by orders
+    </select>
+
+    <!-- 새로운 상세 경로 삽입 -->
+    <insert id="createPathDetail" parameterType="pathDetailDto">
+        insert into path_details (orders, day, content_id, path_id)
+        values (#{orders}, #{day}, #{contentId}, #{pathId})
+    </insert>
+
+    <!-- 기존 상세 경로 업데이트 -->
+    <update id="updatePathDetail" parameterType="pathDetailDto">
+        update path_details
+        set orders = #{orders},
+            day = #{day},
+            content_id = #{contentId}
+        where id = #{id}
+    </update>
+    <!-- 기존 상세 경로 삭제 -->
+    <delete id="deletePathDetail" parameterType="Long">
+        delete from path_details
+        where id = #{id}
+    </delete>
+
+    <!-- 여행 상세 경로를 불러올 때 여행 상세 경로와 관광지 정보를 조인해서 가져오도록 하기 -->
+    <select id="getPathDetailsWithAttraction" parameterType="Long" resultMap="pathDetailAttractionResultMap">
+        select pd.id, pd.orders, pd.day, pd.content_id, pd.path_id,
+               ai.title, ai.addr1, ai.zipcode, ai.first_image, ai.first_image2, ai.sido_code, ai.gugun_code, ai.latitude, ai.longitude
+        from path_details pd join attraction_info ai
+                                  on pd.content_id = ai.content_id
+        where pd.path_id = #{pathId}
+    </select>
+</mapper>

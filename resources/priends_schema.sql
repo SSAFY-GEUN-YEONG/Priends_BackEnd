@@ -22,6 +22,7 @@ CREATE TABLE `members` (
   `status` tinyint(1) NOT NULL DEFAULT '0',
   `alarm` tinyint(1) DEFAULT '0',
   `role` enum('ADMIN','MANAGER','USER') DEFAULT NULL,
+  `social` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `email_UNIQUE` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -42,7 +43,7 @@ CREATE TABLE `boards` (
   `like` INT NOT NULL DEFAULT 0,
   `createdAt` datetime DEFAULT CURRENT_TIMESTAMP,
   `updatedAt` datetime DEFAULT CURRENT_TIMESTAMP,
-  `isDeleted` tinyint NOT NULL DEFAULT 0,
+  `is_deleted` tinyint NOT NULL DEFAULT 0,
   `category` enum('NOTICE','FREE','PATH') NOT NULL,
   `member_id` bigint NOT NULL,
   PRIMARY KEY (`id`),
@@ -61,7 +62,7 @@ DROP TABLE IF EXISTS `comments`;
 CREATE TABLE `comments` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `content` varchar(1000) NOT NULL,
-  `isDeleted` tinyint(1) DEFAULT 0,
+  `is_deleted` tinyint(1) DEFAULT 0,
   `createdAt` datetime DEFAULT CURRENT_TIMESTAMP,
   `board_id` bigint NOT NULL,
   `member_id` bigint DEFAULT NULL,
@@ -82,8 +83,10 @@ DROP TABLE IF EXISTS `path`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `path` (
   `id` bigint NOT NULL AUTO_INCREMENT,
+  `title` varchar(50) NOT NULL,
   `content` varchar(1000) NOT NULL,
-  `isEnd` tinyint(1) DEFAULT 0,
+  `hit` INT NOT NULL DEFAULT 0,
+  `is_end` tinyint(1) DEFAULT 0,
   `createdAt` datetime DEFAULT CURRENT_TIMESTAMP,
   `start_date` datetime DEFAULT NULL,
   `end_date` datetime DEFAULT NULL,
@@ -92,6 +95,29 @@ CREATE TABLE `path` (
   KEY `path_to_members_id_fk_idx` (`member_id`),
   CONSTRAINT `path_to_members_id_fk` FOREIGN KEY (`member_id`) REFERENCES `members` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+
+DROP TABLE IF EXISTS `path_details`;
+CREATE TABLE `priends`.`path_details` (
+  `id` BIGINT NOT NULL AUTO_INCREMENT,
+  `orders` INT NOT NULL,
+  `createdAt` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
+  `updatedAt` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
+  `day` INT NOT NULL,
+  `content_id` INT NOT NULL,
+  `path_id` BIGINT NOT NULL,
+  PRIMARY KEY (`id`), 
+  CONSTRAINT `path_details_to_attraction_info_content_id`
+    FOREIGN KEY (`content_id`)
+    REFERENCES `priends`.`attraction_info` (`content_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `path_details_to_path_path_id`
+    FOREIGN KEY (`path_id`)
+    REFERENCES `priends`.`path` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
 
 -- Dump completed on 2023-10-31 16:10:05 
   

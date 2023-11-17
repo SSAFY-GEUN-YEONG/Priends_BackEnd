@@ -19,7 +19,7 @@ public interface MemberMapper {
 
 	void deleteMember(Long memberId);
 
-	MemberInfoDto loginMember(MemberLoginRequestDto memberLoginDto);
+	MemberDto loginCheckMember(MemberLoginRequestDto memberLoginRequestDto);
 
 	String getPasswordMember(Long memberId);
 }

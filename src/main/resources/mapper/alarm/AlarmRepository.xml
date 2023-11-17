@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.priends.domain.alarm.mapper.AlarmMapper">
+
+    <!-- 알람(쪽지)와 회원 정보를 조인한 결과를 매핑 할 수 있게끔 -->
+    <resultMap id="alarmWithMemberResultMap" type="com.ssafy.priends.domain.alarm.dto.AlarmWithMemberDto">
+        <id property="id" column="id"></id>
+        <result property="content" column="content"></result>
+        <result property="read" column="read"></result>
+        <result property="fromMemberId" column="from_member_id"></result>
+        <result property="fromMemberNickname" column="nickname"></result>
+        <result property="createdAt" column="createdAt"></result>
+    </resultMap>
+
+    <!-- 알람 생성하기 (쪽지 보내기) -->
+    <!-- createAlarm mapper 인터페이스에서 @Param 어노테이션을 이용해서 파라미터를 보냈음 (파라미터 이름으로 접근하게끔) -->
+    <insert id="createAlarm">
+        insert into alarm (content, from_member_id, to_member_id)
+        values (#{alarmInsert.content}, #{fromMemberId}, #{alarmInsert.toMemberId})
+    </insert>
+
+    <!-- 알람(쪽지) 정보를 불러올 때 알람과 알람 보낸 회원의 정보를 조인해서 가져오도록 하기 -->
+    <select id="getAlarmsWithMember" parameterType="Long" resultMap="alarmWithMemberResultMap">
+        select a.id, a.content, a.read, a.from_member_id, m.nickname, a.createdAt
+        from alarm a inner join members m
+        on a.from_member_id = m.id
+        where a.to_member_id = #{toMemberId}
+    </select>
+
+    <!-- 해당 알림 고유 PK id 값을 통해 삭제  -->
+    <delete id="deleteAlarm" parameterType="Long">
+        delete from alarm
+        where id = #{id}
+    </delete>
+</mapper>
