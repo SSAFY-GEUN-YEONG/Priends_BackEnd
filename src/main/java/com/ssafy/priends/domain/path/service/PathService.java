@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface PathService {
     // 여행 경로 생성
-    Long createPath(PathInsertRequestDto pathInsertRequestDto);
+    Long createPath(PathInsertRequestDto pathInsertRequestDto, Long memberId);
 
     // 해당 회원의 여행 경로 불러오기
     List<PathGetDto> getPathList(Long memberId);

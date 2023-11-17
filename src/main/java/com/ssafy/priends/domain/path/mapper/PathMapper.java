@@ -19,7 +19,7 @@ public interface PathMapper {
     void deletePath(Long pathId);
 
     // 여행 경로 상세 부분
-    void createListPathDetails(List<PathDetailDto> pathDetailDtoList);
+//    void createListPathDetails(List<PathDetailDto> pathDetailDtoList);
 
     List<PathDetailDto> getSimplePathDetails(Long pathId);
 
