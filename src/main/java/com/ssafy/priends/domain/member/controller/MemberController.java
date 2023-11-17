@@ -1,5 +1,7 @@
 package com.ssafy.priends.domain.member.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.priends.domain.member.dto.*;
 import com.ssafy.priends.global.common.dto.MailCodeDto;
 import com.ssafy.priends.global.common.dto.Message;
@@ -16,6 +18,11 @@ import org.springframework.web.bind.annotation.*;
 import com.ssafy.priends.domain.member.service.MemberService;
 
 import lombok.extern.slf4j.Slf4j;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 @RestController
 @RequestMapping("/member")
@@ -62,7 +69,8 @@ public class MemberController {
 	}
 
 	@PostMapping("/login")
-	public ResponseEntity<Message<MemberLoginResponseDto>> loginMember(@RequestBody MemberLoginRequestDto memberLoginRequestDto) {
+	public ResponseEntity<Message<MemberLoginResponseDto>> loginMember(@RequestBody MemberLoginRequestDto memberLoginRequestDto,
+																	   HttpServletResponse response) {
 
 		TokenMemberInfoDto tokenMemberInfoDto = memberService.loginCheckMember(memberLoginRequestDto);
 		TokenDto tokenDto = jwtService.issueToken(tokenMemberInfoDto);
@@ -71,13 +79,29 @@ public class MemberController {
 				.token(tokenDto)
 				.build();
 
+		// JWT 토큰을 쿠키에 저장
+		Cookie accessTokenCookie = new Cookie("accessToken", tokenDto.getAccessToken());
+		accessTokenCookie.setHttpOnly(true);
+		accessTokenCookie.setPath("/");
+		accessTokenCookie.setMaxAge(3600); // 60분(3600초)으로 설정
+		response.addCookie(accessTokenCookie);
+		// 필요에 따라 Secure 플래그 설정
+		// accessTokenCookie.setSecure(true);
+
 		return ResponseEntity.ok().body(Message.success(memberLoginResponseDto));
 	}
 
 	@GetMapping("/logout")
 	@PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
-	public ResponseEntity<Message<Void>> logoutMember(@AuthenticationPrincipal MemberLoginActiveDto memberLoginActiveDto) {
+	public ResponseEntity<Message<Void>> logoutMember(@AuthenticationPrincipal MemberLoginActiveDto memberLoginActiveDto,
+													  HttpServletResponse response) {
 		memberService.logoutMember(memberLoginActiveDto.getEmail());
+
+		// 쿠키 삭제
+		Cookie accessTokenCookie = new Cookie("accessToken", null);
+		accessTokenCookie.setMaxAge(0);
+		accessTokenCookie.setPath("/");
+		response.addCookie(accessTokenCookie);
 		return ResponseEntity.ok().body(Message.success());
 	}
 
