@@ -1,7 +1,5 @@
 package com.ssafy.priends.domain.member.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.priends.domain.member.dto.*;
 import com.ssafy.priends.global.common.dto.MailCodeDto;
 import com.ssafy.priends.global.common.dto.Message;
@@ -21,8 +19,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 
 @RestController
 @RequestMapping("/member")
@@ -81,7 +77,7 @@ public class MemberController {
 
 		// JWT 토큰을 쿠키에 저장
 		Cookie accessTokenCookie = new Cookie("accessToken", tokenDto.getAccessToken());
-		accessTokenCookie.setHttpOnly(true);
+//		accessTokenCookie.setHttpOnly(true);	// 이거 설정하면 클라이언트단에서 cookie 가져오기 불가능 (get 불가)
 		accessTokenCookie.setPath("/");
 		accessTokenCookie.setMaxAge(3600); // 60분(3600초)으로 설정
 		response.addCookie(accessTokenCookie);
