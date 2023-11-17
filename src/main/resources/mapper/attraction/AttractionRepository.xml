@@ -5,34 +5,68 @@
 <mapper
 	namespace="com.ssafy.priends.domain.attraction.mapper.AttractionMapper">
 
- 
-	<select id="searchAttractions"  >		
-			select * 
-			from attraction_info
-			where sido_code = #{area}  
-			<!-- {0:전체, 1:호텔/32, 2:음식점/39, 3:마켓/38, 4:문화생활/14.15, 5:액티비티/28, 6:자연/12.25 } -->
-			<choose>
-				<when test="typeid == 0"></when>
-				<when test="typeid == 1">and content_type_id = 32</when>
-				<when test="typeid == 2">and content_type_id = 39</when>
-				<when test="typeid == 3">and content_type_id = 38</when>
-				<when test="typeid == 4">and content_type_id in (14,15) </when>
-				<when test="typeid == 5">and content_type_id = 28</when>
-				<when test="typeid == 6">and content_type_id in (12, 25)</when>
-				
-			</choose>
-			<if test="keyword != null">
-				and title like '%${keyword}%'
-			</if>
-	</select>
-	
-	
-	<select id="getAttraction">
-	select i.content_id, i.title, i.addr1, i.addr2, i.latitude, i.longitude, i.first_image, i.sido_code, d.overview
-	from attraction_info i left join attraction_description d
-	on i.content_id = d.content_id
-	where i.content_id= #{attractionId};
+
+	<select id="searchAttractions">
+		select *
+		from attraction_info
+		where sido_code = #{area}
+		<!-- {0:전체, 1:호텔/32, 2:음식점/39, 3:마켓/38, 4:문화생활/14.15, 5:액티비티/28, 6:자연/12.25 
+			} -->
+		<choose>
+			<when test="typeid == 0"></when>
+			<when test="typeid == 1">and content_type_id = 32</when>
+			<when test="typeid == 2">and content_type_id = 39</when>
+			<when test="typeid == 3">and content_type_id = 38</when>
+			<when test="typeid == 4">and content_type_id in (14,15) </when>
+			<when test="typeid == 5">and content_type_id = 28</when>
+			<when test="typeid == 6">and content_type_id in (12, 25)</when>
+
+		</choose>
+		<if test="keyword != null">
+			and title like '%${keyword}%'
+		</if>
 	</select>
 
- 
+
+	<select id="getAttraction">
+		select i.content_id, i.title, i.addr1, i.addr2,
+		i.latitude, i.longitude,
+		i.first_image, i.sido_code, d.overview
+		from
+		attraction_info i left join attraction_description d
+		on i.content_id =
+		d.content_id
+		where i.content_id= #{attractionId};
+	</select>
+
+	<select id="getAllArea">
+		<choose>
+			<when test='word == ""'>
+				SELECT s.sido_code, s.sido_name, g.gugun_code,
+				g.gugun_name
+				FROM sido s LEFT JOIN gugun g
+				ON s.sido_code =
+				g.sido_code
+				WHERE s.sido_code > 10 and (g.gugun_name LIKE "%시" OR
+				g.gugun_name LIKE
+				"%군")
+			</when>
+			<otherwise>
+				SELECT sido.sido_code, sido.sido_name, g.gugun_code,
+				if
+				(sido.sido_code &lt; 10, sido.sido_name, g.gugun_name ) AS
+				gugun_name
+				FROM sido LEFT JOIN gugun g
+				ON sido.sido_code = g.sido_code
+				WHERE
+				sido.sido_name
+				LIKE '%${word}%' or g.gugun_name like
+				'%${word}%'
+
+				group by IF(sido.sido_code &lt; 10, sido.sido_name, g.gugun_name)
+			</otherwise>
+		</choose>
+	</select>
+
+
 </mapper>

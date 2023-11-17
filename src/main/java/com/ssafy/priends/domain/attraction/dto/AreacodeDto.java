@@ -15,12 +15,12 @@ public class AreacodeDto {
 
 	
 	// 시도 코드만 입력받음
-	private String sido_code;
+	private int sido_code;
 	private String sido_name;
 	
 	
-//	private String gugun_code;
-//	private String gugun_name;
+	private int gugun_code;
+	private String gugun_name;
 	
 	
 }

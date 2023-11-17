@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ssafy.priends.domain.attraction.dto.AreacodeDto;
 import com.ssafy.priends.domain.attraction.dto.AttractionDto;
 import com.ssafy.priends.domain.attraction.service.AttractionService;
 import com.ssafy.priends.global.common.dto.Message;
@@ -23,6 +24,14 @@ import lombok.extern.slf4j.Slf4j;
 public class AttractionController {
 
 	private final AttractionService attractionService;
+
+	@GetMapping("/main")
+	public ResponseEntity<Message<List<AreacodeDto>>> getAllArea(@RequestParam( required = false) String word)
+			throws Exception {
+		System.out.println("word"+word);
+		List<AreacodeDto> areas = attractionService.getAllArea(word);
+		return ResponseEntity.ok().body(Message.success(areas));
+	}
 
 	/**
 	 * 관광지 지역, 유형, 키워드 별 검색
@@ -42,7 +51,7 @@ public class AttractionController {
 	}
 
 	/**
-	 * 관광지 상세 조회 
+	 * 관광지 상세 조회
 	 */
 	@GetMapping("/{attractionId}/view")
 	public ResponseEntity<Message<AttractionDto>> getAttraction(@PathVariable("attractionId") int attractionId)

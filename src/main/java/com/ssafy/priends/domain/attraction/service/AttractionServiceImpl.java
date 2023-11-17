@@ -13,20 +13,24 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class AttractionServiceImpl implements AttractionService{
-	
+public class AttractionServiceImpl implements AttractionService {
+
 	private final AttractionMapper attractionMapper;
 
- 
 	@Override
 	public List<AttractionDto> searchAttractions(int area, int typeid, String keyword) throws Exception {
 		return attractionMapper.searchAttractions(area, typeid, keyword);
 	}
- 
 
 	@Override
 	public AttractionDto getAttraction(int attractionId) throws Exception {
 		return attractionMapper.getAttraction(attractionId);
 	}
- 
+
+	@Override
+	public List<AreacodeDto> getAllArea(String word) throws Exception {
+		System.out.println(word);
+		return attractionMapper.getAllArea(word);
+	}
+
 }
