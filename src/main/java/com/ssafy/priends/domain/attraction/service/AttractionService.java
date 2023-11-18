@@ -2,6 +2,7 @@ package com.ssafy.priends.domain.attraction.service;
 
 import java.util.List;
 
+import com.ssafy.priends.domain.attraction.dto.AreaHomeDto;
 import com.ssafy.priends.domain.attraction.dto.AreacodeDto;
 import com.ssafy.priends.domain.attraction.dto.AttractionDto;
 
@@ -13,4 +14,11 @@ public interface AttractionService {
 
 	List<AreacodeDto> getAllArea(String word) throws Exception;
 
-}
+	String getAreaHomeImg(String city,boolean isOnlySi) throws Exception;
+
+	List<AttractionDto> getAreaHomeAttraction(String city, boolean isOnlySi) throws Exception;
+
+	List<AttractionDto> getAttractionListAreaHome(String city, String category, boolean isOnlySi)throws Exception;
+
+
+} 

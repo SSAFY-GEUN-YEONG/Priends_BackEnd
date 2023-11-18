@@ -10,14 +10,14 @@
 		select *
 		from attraction_info
 		where sido_code = #{area}
-		<!-- {0:전체, 1:호텔/32, 2:음식점/39, 3:마켓/38, 4:문화생활/14.15, 5:액티비티/28, 6:자연/12.25 
+		<!-- {0:전체, 1:호텔/32, 2:문화생활/14.15, 3:음식점/39, 4:마켓/38, 5:액티비티/28, 6:자연/12.25 
 			} -->
 		<choose>
 			<when test="typeid == 0"></when>
 			<when test="typeid == 1">and content_type_id = 32</when>
-			<when test="typeid == 2">and content_type_id = 39</when>
-			<when test="typeid == 3">and content_type_id = 38</when>
-			<when test="typeid == 4">and content_type_id in (14,15) </when>
+			<when test="typeid == 2">and content_type_id in (14,15) </when>
+			<when test="typeid == 3">and content_type_id = 39</when>
+			<when test="typeid == 4">and content_type_id = 38</when>
 			<when test="typeid == 5">and content_type_id = 28</when>
 			<when test="typeid == 6">and content_type_id in (12, 25)</when>
 
@@ -69,4 +69,68 @@
 	</select>
 
 
+	<select id="getAreaHomeImg">
+		select first_image
+		from attraction_info a join
+		<choose>
+			<when test='isOnlySi'>
+				sido s
+				on a.sido_code= s.sido_code
+				where s.sido_name
+				like '%${city}%'
+				 AND (first_image IS NOT NULL AND TRIM(first_image) &lt;&gt; '')
+				order by rand() limit 1;
+			</when>
+			<otherwise>
+				(select s.sido_code, s.sido_name, g.gugun_code,
+					g.gugun_name
+					from sido s join gugun g
+					on s.sido_code = g.sido_code
+					where g.gugun_name like '%${city}%') b
+				on a.sido_code= b.sido_code and
+				a.gugun_code = b.gugun_code
+				where (first_image IS NOT NULL AND TRIM(first_image) &lt;&gt; '')
+				order by
+				rand() limit 1;
+			</otherwise>
+		</choose>
+	</select>
+
+
+
+
+	<select id="getAttractionListAreaHome">
+		select *
+		from attraction_info a join
+		<choose>
+			<when test='isOnlySi'>
+				sido s
+				on a.sido_code= s.sido_code
+				where s.sido_name
+				like '%${city}%'
+				and
+			</when>
+			<otherwise>
+				(select s.sido_code, s.sido_name, g.gugun_code,
+				g.gugun_name
+				from sido s join gugun g
+				on s.sido_code = g.sido_code
+				where g.gugun_name like '%${city}%') b
+				on a.sido_code= b.sido_code and
+				a.gugun_code = b.gugun_code
+				where
+			</otherwise>
+		</choose>
+		<choose>
+			<when test="category == ''"></when>
+			<when test="category == 'hotel'"> a.content_type_id = 32</when>
+			<when test="category == 'culture'"> a.content_type_id in (14,15) </when>
+			<when test="category == 'restaurant'"> a.content_type_id = 39</when>
+			<when test="category == 'market'"> a.content_type_id = 38</when>
+			<when test="category == 'activity'"> a.content_type_id = 28</when>
+			<when test="category == 'nature'"> a.content_type_id in (12, 25)</when>
+		</choose>
+		order by readcount desc
+		limit 3
+	</select>
 </mapper>

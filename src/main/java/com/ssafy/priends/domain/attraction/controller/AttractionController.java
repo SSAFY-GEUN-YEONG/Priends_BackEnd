@@ -1,5 +1,6 @@
 package com.ssafy.priends.domain.attraction.controller;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ssafy.priends.domain.attraction.dto.AreaHomeDto;
 import com.ssafy.priends.domain.attraction.dto.AreacodeDto;
 import com.ssafy.priends.domain.attraction.dto.AttractionDto;
 import com.ssafy.priends.domain.attraction.service.AttractionService;
@@ -24,14 +26,45 @@ import lombok.extern.slf4j.Slf4j;
 public class AttractionController {
 
 	private final AttractionService attractionService;
+	private String[] maincity = { "서울", "대전", "대구", "부산", "울산", "인천", "광주", "세종" };
 
 	@GetMapping("/main")
-	public ResponseEntity<Message<List<AreacodeDto>>> getAllArea(@RequestParam( required = false) String word)
+	public ResponseEntity<Message<List<AreacodeDto>>> getAllArea(@RequestParam(required = false) String word)
 			throws Exception {
-		System.out.println("word"+word);
+		System.out.println("word" + word);
 		List<AreacodeDto> areas = attractionService.getAllArea(word);
 		return ResponseEntity.ok().body(Message.success(areas));
 	}
+
+	@GetMapping("/area/{city}/home")
+	public ResponseEntity<Message<AreaHomeDto>> getAreaHome(@RequestParam String city, @RequestParam String category)
+			throws Exception {
+		boolean isOnlySi = Arrays.asList(maincity).contains(city);
+		System.out.println(city + " " + isOnlySi);
+
+		// 커버 이미지
+		AreaHomeDto areaHome = new AreaHomeDto();
+		areaHome.setImg(attractionService.getAreaHomeImg(city, isOnlySi));
+
+		// 관광명소가져오기
+		areaHome.setNatureAttractions(attractionService.getAttractionListAreaHome(city,"nature", isOnlySi ));
+		areaHome.setRestaurantAttractions(attractionService.getAttractionListAreaHome(city,"restaurant", isOnlySi ));
+		areaHome.setCultureAttractions(attractionService.getAttractionListAreaHome(city,"culture", isOnlySi ));
+		System.out.println(areaHome);
+		return ResponseEntity.ok().body(Message.success(areaHome));
+
+	}
+	
+//	@GetMapping("/area/{city}/{category}")
+//	public ResponseEntity<Message<List<AttractionDto>>> getAreaList(@RequestParam String city, @RequestParam String category)
+//			throws Exception {
+//		boolean isOnlySi = Arrays.asList(maincity).contains(city);
+//		System.out.println(city + " " + isOnlySi);
+//
+//		List<AttractionDto> attractionList= attractionService.getAttractionList(city, category, isOnlySi, orderBy, title, limit);
+//		return ResponseEntity.ok().body(Message.success(attractionList));
+//
+//	}
 
 	/**
 	 * 관광지 지역, 유형, 키워드 별 검색

@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.ssafy.priends.domain.attraction.dto.AreaHomeDto;
 import com.ssafy.priends.domain.attraction.dto.AreacodeDto;
 import com.ssafy.priends.domain.attraction.dto.AttractionDto;
 import com.ssafy.priends.domain.attraction.mapper.AttractionMapper;
@@ -32,5 +33,24 @@ public class AttractionServiceImpl implements AttractionService {
 		System.out.println(word);
 		return attractionMapper.getAllArea(word);
 	}
+
+	@Override
+	public String getAreaHomeImg(String city, boolean isOnlySi) throws Exception {
+		// TODO Auto-generated method stub
+		return attractionMapper.getAreaHomeImg(city, isOnlySi);
+	}
+
+	@Override
+	public List<AttractionDto> getAreaHomeAttraction(String city, boolean isOnlySi) throws Exception {
+		// TODO Auto-generated method stub
+		return attractionMapper.getAreaHomeAttraction(city, isOnlySi);
+	}
+
+	@Override
+	public List<AttractionDto> getAttractionListAreaHome(String city, String category, boolean isOnlySi) throws Exception {
+		// TODO Auto-generated method stub
+		return attractionMapper.getAttractionListAreaHome(city, category, isOnlySi);
+	}
+ 
 
 }
