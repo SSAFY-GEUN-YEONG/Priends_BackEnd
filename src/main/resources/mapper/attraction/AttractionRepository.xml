@@ -95,9 +95,7 @@
 			</otherwise>
 		</choose>
 	</select>
-
-
-
+ 
 
 	<select id="getAttractionListAreaHome">
 		select *
@@ -132,5 +130,45 @@
 		</choose>
 		order by readcount desc
 		limit 3
+	</select>
+
+
+	<select id="getAttractionListAreaCategory">
+		select *
+		from (select i.content_id, i.title, i.content_type_id, i.addr1, i.addr2,
+				i.latitude, i.longitude, i.first_image,i.readcount,  i.sido_code, i.gugun_code, d.overview
+				from attraction_info i left join attraction_description d
+				on i.content_id = d.content_id) a join
+		<choose>
+			<when test='isOnlySi'>
+				sido s
+				on a.sido_code= s.sido_code
+				where s.sido_name
+				like '%${city}%'
+				and
+			</when>
+			<otherwise>
+				(select s.sido_code, s.sido_name, g.gugun_code,
+				g.gugun_name
+				from sido s join gugun g
+				on s.sido_code = g.sido_code
+				where g.gugun_name like '%${city}%') b
+				on a.sido_code= b.sido_code
+				and
+				a.gugun_code = b.gugun_code
+				where
+			</otherwise>
+		</choose>
+		<choose>
+			<when test="category == ''"></when>
+			<when test="category == 'hotel'"> a.content_type_id = 32</when>
+			<when test="category == 'culture'"> a.content_type_id in (14,15) </when>
+			<when test="category == 'restaurant'"> a.content_type_id = 39</when>
+			<when test="category == 'market'"> a.content_type_id = 38</when>
+			<when test="category == 'activity'"> a.content_type_id = 28</when>
+			<when test="category == 'nature'"> a.content_type_id in (12, 25)</when>
+		</choose>
+		order by readcount desc
+		limit 10
 	</select>
 </mapper>

@@ -55,16 +55,16 @@ public class AttractionController {
 
 	}
 	
-//	@GetMapping("/area/{city}/{category}")
-//	public ResponseEntity<Message<List<AttractionDto>>> getAreaList(@RequestParam String city, @RequestParam String category)
-//			throws Exception {
-//		boolean isOnlySi = Arrays.asList(maincity).contains(city);
-//		System.out.println(city + " " + isOnlySi);
-//
-//		List<AttractionDto> attractionList= attractionService.getAttractionList(city, category, isOnlySi, orderBy, title, limit);
-//		return ResponseEntity.ok().body(Message.success(attractionList));
-//
-//	}
+	@GetMapping("/area/{city}/{category}")
+	public ResponseEntity<Message<List<AttractionDto>>> getAreaList(@RequestParam String city, @RequestParam String category)
+			throws Exception {
+		System.out.println(category);
+		boolean isOnlySi = Arrays.asList(maincity).contains(city); 
+
+		List<AttractionDto> attractionList= attractionService.getAttractionListAreaCategory(city,category, isOnlySi, 1 );
+		return ResponseEntity.ok().body(Message.success(attractionList));
+
+	}
 
 	/**
 	 * 관광지 지역, 유형, 키워드 별 검색

@@ -16,9 +16,9 @@ public interface AttractionService {
 
 	String getAreaHomeImg(String city,boolean isOnlySi) throws Exception;
 
-	List<AttractionDto> getAreaHomeAttraction(String city, boolean isOnlySi) throws Exception;
 
 	List<AttractionDto> getAttractionListAreaHome(String city, String category, boolean isOnlySi)throws Exception;
+	List<AttractionDto> getAttractionListAreaCategory(String city, String category, boolean isOnlySi, int order) throws Exception;
 
 
 } 

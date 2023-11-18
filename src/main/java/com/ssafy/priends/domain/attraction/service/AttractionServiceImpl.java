@@ -41,16 +41,16 @@ public class AttractionServiceImpl implements AttractionService {
 	}
 
 	@Override
-	public List<AttractionDto> getAreaHomeAttraction(String city, boolean isOnlySi) throws Exception {
-		// TODO Auto-generated method stub
-		return attractionMapper.getAreaHomeAttraction(city, isOnlySi);
-	}
-
-	@Override
-	public List<AttractionDto> getAttractionListAreaHome(String city, String category, boolean isOnlySi) throws Exception {
+	public List<AttractionDto> getAttractionListAreaHome(String city, String category, boolean isOnlySi)
+			throws Exception {
 		// TODO Auto-generated method stub
 		return attractionMapper.getAttractionListAreaHome(city, category, isOnlySi);
 	}
- 
+
+	@Override
+	public List<AttractionDto> getAttractionListAreaCategory(String city, String category, boolean isOnlySi, int order)
+			throws Exception {
+		return attractionMapper.getAttractionListAreaCategory(city, category, isOnlySi, order);
+	}
 
 }
