@@ -3,6 +3,7 @@ package com.ssafy.priends.domain.member.service;
 import com.ssafy.priends.domain.member.dto.MemberGetDto;
 import com.ssafy.priends.domain.member.dto.MemberInfoDto;
 import com.ssafy.priends.domain.member.dto.MemberLoginRequestDto;
+import com.ssafy.priends.domain.member.dto.enums.MemberRole;
 import com.ssafy.priends.domain.member.exception.MemberError;
 import com.ssafy.priends.domain.member.exception.MemberException;
 import com.ssafy.priends.global.component.jwt.dto.TokenMemberInfoDto;
@@ -45,6 +46,7 @@ public class MemberServiceImpl implements MemberService {
 	public void signUpMember(MemberDto memberDto) {
 		memberDto.setStatus(false);
 		memberDto.setPassword(passwordEncoder.encode(memberDto.getPassword()));	// 패스워드 암호화 작업
+		memberDto.setRole(MemberRole.USER);
 		// 회원가입 시 프로필 이미지 default값으로 설정
 		memberDto.setImage("https://mblogthumb-phinf.pstatic.net/MjAxNzAxMDdfNTcg/MDAxNDgzNzkxMzc3NjQ1.BAuEhaa3Ffc-J5Y0GP_cSZsBrQYFITqU_f8ZkMWt2vUg.qEjN-iuo6pJR4tTz6BfeAu5X7j6e2Qn8BRugUUTZgxsg.JPEG.gkfngkfn414/%EA%B7%80%EC%97%AC%EC%9A%B4_%EB%B3%B4%EB%85%B8%EB%B3%B4%EB%85%B8_%EC%BA%90%EB%A6%AD%ED%84%B0_%EA%B7%B8%EB%A6%AC%EA%B8%B0_%EA%B0%95%EC%A2%8C7.jpg?type=w420");
 		memberMapper.signUpMember(memberDto);
