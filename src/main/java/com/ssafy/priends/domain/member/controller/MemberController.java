@@ -81,7 +81,7 @@ public class MemberController {
 //		accessTokenCookie.setHttpOnly(true);	// 이거 설정하면 클라이언트단에서 cookie 가져오기 불가능 (get 불가)
 		accessTokenCookie.setPath("/");
 		accessTokenCookie.setMaxAge(3600); // 60분(3600초)으로 설정
-		log.info(accessTokenCookie.getValue());
+//		log.info(accessTokenCookie.getValue());
 		response.addCookie(accessTokenCookie);
 		// 필요에 따라 Secure 플래그 설정
 		// accessTokenCookie.setSecure(true);
