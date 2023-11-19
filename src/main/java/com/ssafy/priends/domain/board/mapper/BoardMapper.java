@@ -11,12 +11,14 @@ import com.ssafy.priends.domain.board.dto.BoardMemberDto;
 
 @Mapper
 public interface BoardMapper {
-	
+
 	void writePost(BoardDto board) throws SQLException;
 
 	BoardMemberDto getPost(long id) throws SQLException;
 
-	List<BoardMemberDto> listPost(String category) throws SQLException;
+	List<BoardMemberDto> listPost(Map<String, Object> param) throws SQLException;
+
+	int getTotalArticleCount(Map<String, Object> param) throws SQLException;
 
 	void updateHit(long id) throws SQLException;
 
@@ -24,5 +26,4 @@ public interface BoardMapper {
 
 	void deletePost(long id) throws SQLException;
 
-	
 }

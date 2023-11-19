@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.priends.domain.board.dto.BoardDto;
+import com.ssafy.priends.domain.board.dto.BoardListDto;
 import com.ssafy.priends.domain.board.dto.BoardMemberDto;
 import com.ssafy.priends.domain.board.mapper.BoardMapper;
 
@@ -32,8 +33,40 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public List<BoardMemberDto> listPost(String category) throws Exception {
-		return boardMapper.listPost(category);
+	public BoardListDto listPost(Map<String, String> map) throws Exception {
+		
+		Map<String, Object> param = new HashMap<String, Object>();
+		//카테고리 처리
+		param.put("category", map.get("category") == null ? "FREE" : map.get("category"));
+		//페이지네이션 처리
+		int currentPage = Integer.parseInt(map.get("pgno") == null ? "1" : map.get("pgno"));
+		int sizePerPage = Integer.parseInt(map.get("spp") == null ? "20" : map.get("spp"));
+		int start = currentPage * sizePerPage - sizePerPage;
+		param.put("start", start);
+		param.put("listsize", sizePerPage);
+
+		//검색어 처리
+		param.put("word", map.get("word") == null ? "" : map.get("word"));
+		String key = map.get("key");
+		param.put("key", key == null ? "" : key);
+		if ("member_id".equals(key))
+			param.put("key", key == null ? "" : "b.member_id");
+		List<BoardMemberDto> list = boardMapper.listPost(param);
+
+		if ("member_id".equals(key))
+			param.put("key", key == null ? "" : "member_id");
+		int totalArticleCount = boardMapper.getTotalArticleCount(param);
+		int totalPageCount = (totalArticleCount - 1) / sizePerPage + 1;
+
+		System.out.println(param);
+		
+		BoardListDto boardListDto = new BoardListDto();
+		boardListDto.setArticles(list);
+		boardListDto.setCurrentPage(currentPage);
+		boardListDto.setTotalPageCount(totalPageCount);
+
+		
+		return boardListDto;
 	}
 
 	@Override
@@ -50,6 +83,7 @@ public class BoardServiceImpl implements BoardService {
 	public void deletePost(long id) throws Exception {
 		boardMapper.deletePost(id);
 	}
+
 
 
 }

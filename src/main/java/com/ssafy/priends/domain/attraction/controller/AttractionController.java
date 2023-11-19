@@ -62,6 +62,8 @@ public class AttractionController {
 		boolean isOnlySi = Arrays.asList(maincity).contains(city); 
 
 		List<AttractionDto> attractionList= attractionService.getAttractionListAreaCategory(city,category, isOnlySi, 1 );
+		
+		
 		return ResponseEntity.ok().body(Message.success(attractionList));
 
 	}

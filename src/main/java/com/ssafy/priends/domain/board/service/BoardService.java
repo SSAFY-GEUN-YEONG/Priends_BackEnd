@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.ssafy.priends.domain.board.dto.BoardDto;
+import com.ssafy.priends.domain.board.dto.BoardListDto;
 import com.ssafy.priends.domain.board.dto.BoardMemberDto;
 
 public interface BoardService {
@@ -11,7 +12,7 @@ public interface BoardService {
 	void writePost(BoardDto board) throws Exception;
 	BoardMemberDto getPost(long id) throws Exception;
 
-	List<BoardMemberDto> listPost(String category) throws Exception;
+	BoardListDto listPost(Map<String, String> map) throws Exception;
 
 	void updateHit(long id) throws Exception;
 

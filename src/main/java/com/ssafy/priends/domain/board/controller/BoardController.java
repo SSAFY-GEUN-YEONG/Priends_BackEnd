@@ -1,6 +1,7 @@
 package com.ssafy.priends.domain.board.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import com.ssafy.priends.global.common.dto.Message;
 import lombok.NoArgsConstructor;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.priends.domain.board.dto.BoardDto;
+import com.ssafy.priends.domain.board.dto.BoardListDto;
 import com.ssafy.priends.domain.board.dto.BoardMemberDto;
 import com.ssafy.priends.domain.board.service.BoardService;
 
@@ -32,18 +34,37 @@ public class BoardController {
 	public ResponseEntity<Message<Void>> writePost( @RequestBody BoardDto boardDto ) throws Exception {
 //		MemberDto member = (MemberDto) session.getAttribute("userinfo");
 //		board.setUser_id(member.getId());
-		
+		System.out.println(boardDto);
 		boardService.writePost(boardDto);
 		
 		return ResponseEntity.ok().body(Message.success()); //0:성공, 1:실패
 	}
  
-	// category에 따라서 글 가져오기 -> category : 'NOTICE','FREE','PATH'
+	// category에 따라서 글 가져오기 -> category : 'NOTICE','FREE','QNA'
 	@GetMapping("/list")
-	public ResponseEntity<Message<List<BoardMemberDto>>> listPost(@RequestParam String category) throws Exception {
-		List<BoardMemberDto> list = boardService.listPost(category);
+	public ResponseEntity<Message<BoardListDto>> listPost(@RequestParam  Map<String, String> map) throws Exception {
+	
+		System.out.println("listArticle map - {}" + map);
+		BoardListDto list = boardService.listPost(map);
 		return ResponseEntity.ok().body(Message.success(list));
 	}
+	/* 
+	public ResponseEntity<?> listArticle(
+			@RequestParam  ( required = true) Map<String, String> map) {
+		log.info("listArticle map - {}", map);
+		try {
+			BoardListDto boardListDto = boardService.listArticle(map);
+			HttpHeaders header = new HttpHeaders();
+			header.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+			return ResponseEntity.ok().headers(header).body(boardListDto);
+		} catch (Exception e) {
+			return exceptionHandling(e);
+		}
+	}
+
+	 */
+	
+	
 
 	@GetMapping("/view")
 	public ResponseEntity<Message<BoardMemberDto>> getPost(@RequestParam("id") long id ) throws Exception {

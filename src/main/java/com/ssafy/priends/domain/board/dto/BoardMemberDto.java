@@ -22,9 +22,10 @@ public class BoardMemberDto {
 	private String updatedAt;
 	private boolean isdeleted;
 	private String category;
+	
 	private Long member_id;
 	private String member_email;
-	private String member_name;
+	private String member_nickname;
 
 	
 }

@@ -4,17 +4,38 @@
 
 <mapper namespace="com.ssafy.priends.domain.board.mapper.BoardMapper">
 
-	<insert id="writePost" parameterType="boardDto" >
-		insert into boards (title, content,  category, member_id)
-		values ( #{title}, #{content}, #{category}, 1)
+	<insert id="writePost" parameterType="boardDto">
+		insert into boards (title, content, category, member_id)
+		values ( #{title}, #{content}, #{category}, #{member_id})
 	</insert>
 
+	<sql id="search">
+		<if test="word != null and word != ''">
+			<if test="key == 'title'">
+				and title like concat('%', #{word}, '%')
+			</if> 
+				<if test="key != 'title'">
+				and ${key} = #{word}
+			</if>
+		</if>
+	</sql>
+
 	<select id="listPost" parameterType="String" >
-		select b.id, b.title, b.content, b.hit, b.createdAt, m.id as member_id, m.email as member_email, m.name as member_name
+		select b.id, b.title, b.content, b.hit, b.like,  b.createdAt, m.id as member_id,  m.nickname as member_nickname
 		from boards b join members m
-						   on b.member_id = m.id
+		on b.member_id = m.id
 		where b.category = #{category}
-		order by b.id
+		<include refid="search"></include>
+		order by b.id desc
+		limit #{start}, #{listsize}
+	</select>
+	
+	<select id="getTotalArticleCount" parameterType="map" resultType="int">
+		select count(id)
+		from boards
+		<where>
+			<include refid="search"></include>
+		</where>
 	</select>
 
 	<select id="getPost" parameterType="long" >
