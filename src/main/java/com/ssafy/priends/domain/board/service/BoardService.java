@@ -16,7 +16,7 @@ public interface BoardService {
 
 	void updateHit(long id) throws Exception;
 
-	void modifyPost(BoardDto board) throws Exception;
+	void modifyPost(BoardMemberDto board) throws Exception;
 	void deletePost(long id) throws Exception;
 	
 

@@ -8,9 +8,11 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -66,28 +68,29 @@ public class BoardController {
 	
 	
 
-	@GetMapping("/view")
-	public ResponseEntity<Message<BoardMemberDto>> getPost(@RequestParam("id") long id ) throws Exception {
+	@GetMapping("/view/{id}")
+	public ResponseEntity<Message<BoardMemberDto>> getPost( @PathVariable("id") long id) throws Exception {
 		System.out.println("id=" + id);
 		boardService.updateHit(id);
 		BoardMemberDto board = boardService.getPost(id);
 		return ResponseEntity.ok().body(Message.success(board));
 	}
 
-	@GetMapping("/modify")
-	public ResponseEntity<Message<BoardMemberDto>> modifyPost(@RequestParam("id") int id ) throws Exception {
+	@GetMapping("/modify/{id}")
+	public ResponseEntity<Message<BoardMemberDto>> modifyPost( @PathVariable("id") long id) throws Exception {
 		BoardMemberDto board = boardService.getPost(id);
 		return ResponseEntity.ok().body(Message.success(board));
 	}
 
-	@PostMapping("/modify")
-	public ResponseEntity<Message<Void>> modifyPost(@RequestBody BoardDto board) throws Exception {
+	@PutMapping("/modify") 
+	public ResponseEntity<Message<Void>> modifyPost(@RequestBody BoardMemberDto board) throws Exception {
+		System.out.println("modify");
 		boardService.modifyPost(board);
 		return ResponseEntity.ok().body(Message.success());
 	}
 
-	@GetMapping("/delete")
-	public ResponseEntity<Message<Void>> deletePost(@RequestParam("id") Long id) throws Exception {
+	@PutMapping("/delete/{id}")
+	public ResponseEntity<Message<Void>> deletePost(@PathVariable("id") long id) throws Exception {
 		boardService.deletePost(id);
 		return ResponseEntity.ok().body(Message.success());
 	}

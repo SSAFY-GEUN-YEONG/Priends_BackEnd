@@ -19,7 +19,6 @@ import lombok.AllArgsConstructor;
 public class BoardServiceImpl implements BoardService {
 
 	private final BoardMapper boardMapper;
-	 
 
 	@Override
 	public void writePost(BoardDto board) throws Exception {
@@ -34,38 +33,43 @@ public class BoardServiceImpl implements BoardService {
 
 	@Override
 	public BoardListDto listPost(Map<String, String> map) throws Exception {
-		
+
 		Map<String, Object> param = new HashMap<String, Object>();
-		//카테고리 처리
+		// 카테고리 처리
 		param.put("category", map.get("category") == null ? "FREE" : map.get("category"));
-		//페이지네이션 처리
+		// 페이지네이션 처리
 		int currentPage = Integer.parseInt(map.get("pgno") == null ? "1" : map.get("pgno"));
 		int sizePerPage = Integer.parseInt(map.get("spp") == null ? "20" : map.get("spp"));
 		int start = currentPage * sizePerPage - sizePerPage;
 		param.put("start", start);
 		param.put("listsize", sizePerPage);
 
-		//검색어 처리
+		// 검색어 처리
 		param.put("word", map.get("word") == null ? "" : map.get("word"));
 		String key = map.get("key");
 		param.put("key", key == null ? "" : key);
-		if ("member_id".equals(key))
-			param.put("key", key == null ? "" : "b.member_id");
+//		if ("nickname".equals(key))
+//			param.put("key", key == null ? "" : "b.member_nick");
+//		else 
+		if ("id".equals(key))
+			param.put("key", key == null ? "" : "b.id");
 		List<BoardMemberDto> list = boardMapper.listPost(param);
 
-		if ("member_id".equals(key))
-			param.put("key", key == null ? "" : "member_id");
+//		if ("member_id".equals(key))
+//			param.put("key", key == null ? "" : "member_id");
+//		else
+		if ("id".equals(key))
+			param.put("key", key == null ? "" : "id");
 		int totalArticleCount = boardMapper.getTotalArticleCount(param);
 		int totalPageCount = (totalArticleCount - 1) / sizePerPage + 1;
 
 		System.out.println(param);
-		
+
 		BoardListDto boardListDto = new BoardListDto();
 		boardListDto.setArticles(list);
 		boardListDto.setCurrentPage(currentPage);
 		boardListDto.setTotalPageCount(totalPageCount);
 
-		
 		return boardListDto;
 	}
 
@@ -75,7 +79,7 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public void modifyPost(BoardDto board) throws Exception {
+	public void modifyPost(BoardMemberDto board) throws Exception {
 		boardMapper.modifyPost(board);
 	}
 
@@ -83,7 +87,5 @@ public class BoardServiceImpl implements BoardService {
 	public void deletePost(long id) throws Exception {
 		boardMapper.deletePost(id);
 	}
-
-
 
 }

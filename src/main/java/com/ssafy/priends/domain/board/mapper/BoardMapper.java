@@ -22,7 +22,7 @@ public interface BoardMapper {
 
 	void updateHit(long id) throws SQLException;
 
-	void modifyPost(BoardDto board) throws SQLException;
+	void modifyPost(BoardMemberDto board) throws SQLException;
 
 	void deletePost(long id) throws SQLException;
 
