@@ -1,5 +1,6 @@
 package com.ssafy.priends.domain.path.service;
 
+import com.ssafy.priends.domain.attraction.dto.AreacodeDto;
 import com.ssafy.priends.domain.path.dto.*;
 
 import java.util.List;
@@ -21,4 +22,8 @@ public interface PathService {
     void createAndUpdatePathDetails(Long pathId, List<PathDetailInsertRequestDto> newPathDetails);
 
     List<PathDetailWithAttractionDto> getPathDetailsWithAttraction(Long pathId);
+
+	List<AreacodeDto> getSido();
+
+	List<AreacodeDto> getGugun(int sido);
 }

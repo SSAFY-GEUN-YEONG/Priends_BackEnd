@@ -1,5 +1,6 @@
 package com.ssafy.priends.domain.path.mapper;
 
+import com.ssafy.priends.domain.attraction.dto.AreacodeDto;
 import com.ssafy.priends.domain.path.dto.PathDetailDto;
 import com.ssafy.priends.domain.path.dto.PathDetailWithAttractionDto;
 import com.ssafy.priends.domain.path.dto.PathDto;
@@ -30,4 +31,8 @@ public interface PathMapper {
     void deletePathDetail(Long id);
 
     List<PathDetailWithAttractionDto> getPathDetailsWithAttraction(Long pathId);
+
+	List<AreacodeDto> getSido();
+
+	List<AreacodeDto> getGugun(int sido);
 }

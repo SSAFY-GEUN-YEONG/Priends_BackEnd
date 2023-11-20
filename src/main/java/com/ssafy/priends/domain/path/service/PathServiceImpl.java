@@ -1,5 +1,6 @@
 package com.ssafy.priends.domain.path.service;
 
+import com.ssafy.priends.domain.attraction.dto.AreacodeDto;
 import com.ssafy.priends.domain.path.dto.*;
 import com.ssafy.priends.domain.path.mapper.PathMapper;
 import lombok.RequiredArgsConstructor;
@@ -135,6 +136,18 @@ public class PathServiceImpl implements PathService {
         // 기존 상세 경로 삭제
         pathMapper.deletePathDetail(id);
     }
+
+	@Override
+	public List<AreacodeDto> getSido() {
+		// TODO Auto-generated method stub
+		return  pathMapper.getSido();
+	} 
+
+	@Override
+	public List<AreacodeDto> getGugun(int sido) {
+		// TODO Auto-generated method stub
+		return pathMapper.getGugun(sido);
+	}
 
 
 }
