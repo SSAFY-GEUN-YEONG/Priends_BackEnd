@@ -54,7 +54,6 @@ public class MemberController {
 	@GetMapping("/get")
 	@PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
 	public ResponseEntity<Message<MemberGetDto>> getMember(@AuthenticationPrincipal MemberLoginActiveDto memberLoginActiveDto) {
-		System.out.println("member get ");
 		MemberGetDto memberGetDto = memberService.getMember(memberLoginActiveDto.getId());
 		return ResponseEntity.ok().body(Message.success(memberGetDto));
 	}
@@ -128,5 +127,14 @@ public class MemberController {
 		return ResponseEntity.ok().body(Message.success());
 	}
 
+	// 비밀번호 변경
+	@PutMapping("/password/update")
+	@PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
+	public ResponseEntity<Message<Void>> updatePasswordMember(@RequestBody MemberPasswordUpdateDto memberPasswordUpdateDto,
+															  @AuthenticationPrincipal MemberLoginActiveDto memberLoginActiveDto) {
+		memberPasswordUpdateDto.setId(memberLoginActiveDto.getId());
+		memberService.updatePasswordMember(memberPasswordUpdateDto);
+		return ResponseEntity.ok().body(Message.success());
+	}
 
 }

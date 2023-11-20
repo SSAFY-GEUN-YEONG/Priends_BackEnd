@@ -1,11 +1,7 @@
 package com.ssafy.priends.domain.member.mapper;
 
-import com.ssafy.priends.domain.member.dto.MemberGetDto;
-import com.ssafy.priends.domain.member.dto.MemberInfoDto;
-import com.ssafy.priends.domain.member.dto.MemberLoginRequestDto;
+import com.ssafy.priends.domain.member.dto.*;
 import org.apache.ibatis.annotations.Mapper;
-
-import com.ssafy.priends.domain.member.dto.MemberDto;
 
 @Mapper
 public interface MemberMapper {
@@ -22,4 +18,8 @@ public interface MemberMapper {
 	MemberDto loginCheckMember(MemberLoginRequestDto memberLoginRequestDto);
 
 	String getPasswordMember(Long memberId);
+
+	void updatePasswordMember(MemberPasswordUpdateDto memberPasswordUpdateDto);
+
+	MemberDto loginIdCheckMember(Long memberId);
 }

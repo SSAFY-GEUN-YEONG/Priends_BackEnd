@@ -1,8 +1,6 @@
 package com.ssafy.priends.domain.member.service;
 
-import com.ssafy.priends.domain.member.dto.MemberGetDto;
-import com.ssafy.priends.domain.member.dto.MemberInfoDto;
-import com.ssafy.priends.domain.member.dto.MemberLoginRequestDto;
+import com.ssafy.priends.domain.member.dto.*;
 import com.ssafy.priends.domain.member.dto.enums.MemberRole;
 import com.ssafy.priends.domain.member.exception.MemberError;
 import com.ssafy.priends.domain.member.exception.MemberException;
@@ -13,7 +11,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ssafy.priends.domain.member.dto.MemberDto;
 import com.ssafy.priends.domain.member.mapper.MemberMapper;
 
 import lombok.extern.slf4j.Slf4j;
@@ -117,6 +114,28 @@ public class MemberServiceImpl implements MemberService {
 		} catch(Exception e) {
 			throw new MemberException(MemberError.ALREADY_MEMBER_LOGOUT);
 		}
+	}
+
+	@Override
+	public void updatePasswordMember(MemberPasswordUpdateDto memberPasswordUpdateDto) {
+		MemberDto member = memberMapper.loginIdCheckMember(memberPasswordUpdateDto.getId());
+
+		if(member == null) {
+			throw new MemberException(MemberError.NOT_FOUND_MEMBER);
+		}
+
+		String realPassword = member.getPassword();
+
+		if(!passwordEncoder.matches(memberPasswordUpdateDto.getNowPassword(), realPassword)) {
+			throw new MemberException(MemberError.NOT_MATCH_PASSWORD);
+		}
+
+		if(passwordEncoder.matches(memberPasswordUpdateDto.getChangePassword(), realPassword)) {
+			throw new MemberException(MemberError.NOW_CHANGE_MATCH_PASSWORD);
+		}
+
+		memberPasswordUpdateDto.setChangePassword(passwordEncoder.encode(memberPasswordUpdateDto.getChangePassword()));
+		memberMapper.updatePasswordMember(memberPasswordUpdateDto);
 	}
 
 }
