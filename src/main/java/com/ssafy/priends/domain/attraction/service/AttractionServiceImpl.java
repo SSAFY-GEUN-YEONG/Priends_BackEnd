@@ -53,4 +53,10 @@ public class AttractionServiceImpl implements AttractionService {
 		return attractionMapper.getAttractionListAreaCategory(city, category, isOnlySi, order);
 	}
 
+	@Override
+	public void updateHit(int attractionId) throws Exception {
+		attractionMapper.updateHit(attractionId);
+		
+	}
+
 }

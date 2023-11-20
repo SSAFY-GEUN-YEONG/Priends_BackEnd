@@ -59,8 +59,13 @@
 			IF(sido.sido_code &lt; 10, sido.sido_name, g.gugun_name)
 		</otherwise>
 	</choose>
-</select>
+	</select>	
 
+	<update id="updateHit" >
+			update attraction_info
+			set readcount = readcount + 1
+			where content_id = #{attractionId}
+	</update>
 
 
 	<select id="getAreaHomeImg">

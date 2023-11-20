@@ -92,6 +92,7 @@ public class AttractionController {
 	public ResponseEntity<Message<AttractionDto>> getAttraction(@PathVariable("attractionId") int attractionId)
 			throws Exception {
 		AttractionDto attraction = attractionService.getAttraction(attractionId);
+		attractionService.updateHit(attractionId);
 		return ResponseEntity.ok().body(Message.success(attraction));
 	}
 

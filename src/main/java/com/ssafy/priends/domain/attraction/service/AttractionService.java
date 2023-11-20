@@ -20,5 +20,7 @@ public interface AttractionService {
 	List<AttractionDto> getAttractionListAreaHome(String city, String category, boolean isOnlySi)throws Exception;
 	List<AttractionDto> getAttractionListAreaCategory(String city, String category, boolean isOnlySi, int order) throws Exception;
 
+	void updateHit(int attractionId) throws Exception;
+
 
 } 
