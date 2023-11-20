@@ -51,4 +51,17 @@
  		from members
  		where id = #{id}
  	</select>
+
+	<!-- 현재 로그인 되어 있는 고유 ID를 통한 로그인 된 회원 정보 가져오기 -->
+	<select id="loginIdCheckMember" parameterType="Long" resultType="memberDto">
+ 		select id, email, password, nickname, image, status, alarm, role
+ 		from members
+ 		where id = #{id}
+ 	</select>
+
+	<!-- 비밀번호 변경 -->
+	<update id="updatePasswordMember" parameterType="memberPasswordUpdateDto">
+		update members set password = #{changePassword}
+		where id = #{id}
+	</update>
 </mapper>

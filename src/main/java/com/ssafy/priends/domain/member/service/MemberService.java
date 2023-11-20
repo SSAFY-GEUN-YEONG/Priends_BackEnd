@@ -1,9 +1,6 @@
 package com.ssafy.priends.domain.member.service;
 
-import com.ssafy.priends.domain.member.dto.MemberDto;
-import com.ssafy.priends.domain.member.dto.MemberGetDto;
-import com.ssafy.priends.domain.member.dto.MemberInfoDto;
-import com.ssafy.priends.domain.member.dto.MemberLoginRequestDto;
+import com.ssafy.priends.domain.member.dto.*;
 import com.ssafy.priends.global.component.jwt.dto.TokenMemberInfoDto;
 
 public interface MemberService {
@@ -23,4 +20,6 @@ public interface MemberService {
 	String getPasswordMember(Long memberId);
 
 	void logoutMember(String memberEmail);
+
+	void updatePasswordMember(MemberPasswordUpdateDto memberPasswordUpdateDto);
 }
