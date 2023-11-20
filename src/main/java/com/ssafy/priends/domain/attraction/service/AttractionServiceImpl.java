@@ -48,9 +48,9 @@ public class AttractionServiceImpl implements AttractionService {
 	}
 
 	@Override
-	public List<AttractionDto> getAttractionListAreaCategory(String city, String category, boolean isOnlySi, int order)
+	public List<AttractionDto> getAttractionListAreaCategory(String city, String category, boolean isOnlySi, int order, int limitcount)
 			throws Exception {
-		return attractionMapper.getAttractionListAreaCategory(city, category, isOnlySi, order);
+		return attractionMapper.getAttractionListAreaCategory(city, category, isOnlySi, order, limitcount);
 	}
 
 	@Override

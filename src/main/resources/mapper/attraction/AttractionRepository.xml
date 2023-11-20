@@ -167,7 +167,14 @@
 			<when test="category == 'activity'"> a.content_type_id = 28</when>
 			<when test="category == 'nature'"> a.content_type_id in (12, 25)</when>
 		</choose>
-		order by readcount desc
-		limit 10
+		<choose>
+			<when test='order'>order by readcount desc</when>
+			<when test='order == 1'>order by readcount desc</when>
+			<when test='order == 2'>order by i.title desc</when>
+		</choose>
+		<choose>
+			<when test='limitcount==0'></when>
+			<otherwise>limit 10</otherwise>
+		</choose>
 	</select>
 </mapper>

@@ -56,12 +56,15 @@ public class AttractionController {
 	}
 	
 	@GetMapping("/area/{city}/{category}")
-	public ResponseEntity<Message<List<AttractionDto>>> getAreaList(@RequestParam String city, @RequestParam String category)
+	public ResponseEntity<Message<List<AttractionDto>>> getAreaList(@RequestParam String city, @RequestParam String category,@RequestParam(required = false) Integer order, @RequestParam(required = false) Integer limitcount)
 			throws Exception {
 		System.out.println(category);
 		boolean isOnlySi = Arrays.asList(maincity).contains(city); 
+		if(order == null) order =1;
+		if(limitcount== null) limitcount= 0;
+		
 
-		List<AttractionDto> attractionList= attractionService.getAttractionListAreaCategory(city,category, isOnlySi, 1 );
+		List<AttractionDto> attractionList= attractionService.getAttractionListAreaCategory(city,category, isOnlySi, order , limitcount );
 		
 		
 		return ResponseEntity.ok().body(Message.success(attractionList));

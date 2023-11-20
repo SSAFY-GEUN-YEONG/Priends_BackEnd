@@ -23,7 +23,7 @@ public interface AttractionMapper {
 
  
 	List<AttractionDto> getAttractionListAreaHome(String city, String category, boolean isOnlySi);
-	List<AttractionDto> getAttractionListAreaCategory(String city, String category, boolean isOnlySi, int order) throws SQLException;
+	List<AttractionDto> getAttractionListAreaCategory(String city, String category, boolean isOnlySi, int order, int limitcount) throws SQLException;
 
 	void updateHit(int attractionId) throws SQLException;
 }
