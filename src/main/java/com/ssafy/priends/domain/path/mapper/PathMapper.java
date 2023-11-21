@@ -13,7 +13,7 @@ import java.util.List;
 public interface PathMapper {
     void createPath(PathDto pathDto);
 
-    List<PathGetDto> getPathList(Long memberId);
+    List<PathGetDto> getPathList(boolean isMy,Long memberId);
 
     void updatePath(PathDto PathDto);
 

@@ -25,9 +25,8 @@ public class PathController {
 	@PostMapping("/create")
 	@PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
 	public ResponseEntity<Message<Long>> createPath(@RequestBody PathInsertRequestDto pathInsertRequestDto,
-			@AuthenticationPrincipal MemberLoginActiveDto memberLoginActiveDto) {
-		
-		System.out.println("Ccccccccccccccc");
+			@AuthenticationPrincipal 
+			MemberLoginActiveDto memberLoginActiveDto) {
 		
 		if (pathInsertRequestDto != null) {
 		    // 기존 코드
@@ -43,10 +42,11 @@ public class PathController {
 	}
 
 	@GetMapping("/get/list")
-	@PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
-	public ResponseEntity<Message<List<PathGetDto>>> getPathList(
-			@AuthenticationPrincipal MemberLoginActiveDto memberLoginActiveDto) {
-		List<PathGetDto> pathList = pathService.getPathList(memberLoginActiveDto.getId());
+//	@PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
+	public ResponseEntity<Message<List<PathGetDto>>> getPathList(@RequestParam() boolean isMy,
+//			@AuthenticationPrincipal 
+			MemberLoginActiveDto memberLoginActiveDto) {
+		List<PathGetDto> pathList = pathService.getPathList(isMy, memberLoginActiveDto.getId());
 		return ResponseEntity.ok().body(Message.success(pathList));
 	}
 

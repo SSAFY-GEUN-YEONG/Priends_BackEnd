@@ -7,9 +7,10 @@
 
 	<resultMap id="pathResultMap"
 		type="com.ssafy.priends.domain.path.dto.PathGetDto">
-		<result property="isEnd" column="is_end"></result>
 		<result property="startDate" column="start_date"></result>
 		<result property="endDate" column="end_date"></result>
+		<result property="memberId" column="member_id"></result>
+		<result property="memberNickname" column="nickname"></result>
 	</resultMap>
 
 	<resultMap id="pathDetailResultMap"
@@ -46,12 +47,13 @@
 		values (#{title}, #{content}, #{startDate}, #{endDate}, #{memberId})
 	</insert>
 
-	<select id="getPathList" parameterType="Long"
-		resultMap="pathResultMap">
-		select id, title, content, hit, is_end, createdAt, start_date, end_Date
+	<select id="getPathList"  resultMap="pathResultMap">
+		select id, title, content, hit, createdAt, start_date, end_Date, member_id, nickname
 		from path
-		where member_id = #{memberId}
-		and is_deleted = false
+		where is_deleted = false 
+		<if test="isMy">
+			and member_id = #{memberId}
+		</if>
 		order by createdAt;
 	</select>
 
@@ -134,6 +136,15 @@
 	</select>
 	
 
+<!-- 지역코드 입력해서 해당 지역의 path 가져오기. param으로 sido, gugun 여부 받아야함
+ select * 
+from path p join (select sido_code, gugun_code, path_id
+from path_details d join attraction_info a
+on d.content_id = a.content_id) j
+on p.id = j.path_id
+where sido_code = 5
+group by id;
+ -->
 
 
 </mapper>

@@ -43,8 +43,8 @@ public class PathServiceImpl implements PathService {
     }
 
     @Override
-    public List<PathGetDto> getPathList(Long memberId) {
-        return pathMapper.getPathList(memberId);
+    public List<PathGetDto> getPathList(boolean isMy, Long memberId) {
+        return pathMapper.getPathList(isMy, memberId);
     }
 
     @Override

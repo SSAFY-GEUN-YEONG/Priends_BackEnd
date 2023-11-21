@@ -10,7 +10,7 @@ public interface PathService {
     Long createPath(PathInsertRequestDto pathInsertRequestDto, Long memberId);
 
     // 해당 회원의 여행 경로 불러오기
-    List<PathGetDto> getPathList(Long memberId);
+    List<PathGetDto> getPathList(boolean isMy, Long memberId);
 
     // 여행 경로 수정
     void updatePath(PathUpdateRequestDto pathUpdateRequestDto);
