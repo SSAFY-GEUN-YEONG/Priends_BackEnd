@@ -4,10 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@ToString
 public class PathDetailInsertRequestDto {
     private Long id;
     private int orders; // 일자 별 순서 (1일차에서 1, 2, 3, ...)

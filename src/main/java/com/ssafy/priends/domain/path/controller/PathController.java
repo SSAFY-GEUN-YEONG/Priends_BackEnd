@@ -26,8 +26,20 @@ public class PathController {
 	@PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
 	public ResponseEntity<Message<Long>> createPath(@RequestBody PathInsertRequestDto pathInsertRequestDto,
 			@AuthenticationPrincipal MemberLoginActiveDto memberLoginActiveDto) {
-		Long createdPathId = pathService.createPath(pathInsertRequestDto, memberLoginActiveDto.getId());
-		return ResponseEntity.ok().body(Message.success(createdPathId));
+		
+		System.out.println("Ccccccccccccccc");
+		
+		if (pathInsertRequestDto != null) {
+		    // 기존 코드
+			System.out.println("create " + pathInsertRequestDto);
+			Long createdPathId = pathService.createPath(pathInsertRequestDto, memberLoginActiveDto.getId());
+			return ResponseEntity.ok().body(Message.success(createdPathId));
+		} else {
+		    // pathInsertRequestDto가 null인 경우 처리
+			System.out.println("null");
+			return ResponseEntity.ok().body(Message.success(null));
+		}
+		
 	}
 
 	@GetMapping("/get/list")
@@ -64,6 +76,9 @@ public class PathController {
 	@PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
 	public ResponseEntity<Message<Void>> createAndUpdatePathDetails(@PathVariable("pathId") Long pathId,
 			@RequestBody List<PathDetailInsertRequestDto> pathDetailInsertRequestDtoList) {
+		System.out.println("detail create");
+		System.out.println("id " + pathId);
+		System.out.println("dto " + pathDetailInsertRequestDtoList);
 		pathService.createAndUpdatePathDetails(pathId, pathDetailInsertRequestDtoList);
 		return ResponseEntity.ok().body(Message.success());
 	}

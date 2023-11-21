@@ -25,6 +25,8 @@ public class PathServiceImpl implements PathService {
 
     @Override
     public Long createPath(PathInsertRequestDto pathInsertRequestDto, Long memberId) {
+    	log.info(pathInsertRequestDto.getStartDate());
+    	
         LocalDate startDate = LocalDate.parse(pathInsertRequestDto.getStartDate(), DateTimeFormatter.ISO_LOCAL_DATE);
         LocalDate endDate = LocalDate.parse(pathInsertRequestDto.getEndDate(), DateTimeFormatter.ISO_LOCAL_DATE);
 
