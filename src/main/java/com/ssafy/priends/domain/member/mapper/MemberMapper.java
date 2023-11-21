@@ -22,4 +22,6 @@ public interface MemberMapper {
 	void updatePasswordMember(MemberPasswordUpdateDto memberPasswordUpdateDto);
 
 	MemberDto loginIdCheckMember(Long memberId);
+
+	MemberDto byEmailFindMember(String memberEmail);
 }

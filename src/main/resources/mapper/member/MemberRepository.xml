@@ -64,4 +64,11 @@
 		update members set password = #{changePassword}
 		where id = #{id}
 	</update>
+
+	<!-- 이메일을 통한 회원정보 불러오기 -->
+	<select id="byEmailFindMember" parameterType="String" resultType="memberDto">
+		select id, email, password, nickname, image, status, alarm, role
+		from members
+		where email = #{email};
+	</select>
 </mapper>

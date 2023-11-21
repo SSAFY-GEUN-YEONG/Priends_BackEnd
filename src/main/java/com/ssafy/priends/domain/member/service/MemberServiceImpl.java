@@ -4,6 +4,7 @@ import com.ssafy.priends.domain.member.dto.*;
 import com.ssafy.priends.domain.member.dto.enums.MemberRole;
 import com.ssafy.priends.domain.member.exception.MemberError;
 import com.ssafy.priends.domain.member.exception.MemberException;
+import com.ssafy.priends.global.common.dto.MailCodeDto;
 import com.ssafy.priends.global.component.jwt.dto.TokenMemberInfoDto;
 import com.ssafy.priends.global.component.jwt.repository.RefreshRepository;
 import lombok.RequiredArgsConstructor;
@@ -135,6 +136,21 @@ public class MemberServiceImpl implements MemberService {
 		}
 
 		memberPasswordUpdateDto.setChangePassword(passwordEncoder.encode(memberPasswordUpdateDto.getChangePassword()));
+		memberMapper.updatePasswordMember(memberPasswordUpdateDto);
+	}
+
+	// 임시 비밀번호 발급 (해당 이메일로 임시 비밀번호 발급)
+	@Override
+	public void sendTempPassword(String memberEmail, MailCodeDto mailCodeDto) {
+		MemberDto member = memberMapper.byEmailFindMember(memberEmail);
+
+		if(member == null) {
+			throw new MemberException(MemberError.NOT_FOUND_MEMBER);
+		}
+
+		MemberPasswordUpdateDto memberPasswordUpdateDto = new MemberPasswordUpdateDto();
+		memberPasswordUpdateDto.setId(member.getId());
+		memberPasswordUpdateDto.setChangePassword(passwordEncoder.encode(mailCodeDto.getEmailCode()));
 		memberMapper.updatePasswordMember(memberPasswordUpdateDto);
 	}
 

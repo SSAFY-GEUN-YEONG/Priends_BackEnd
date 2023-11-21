@@ -109,13 +109,10 @@ public class MemberController {
 	}
 
 	// 임시 비밀번호 재발급
-	@GetMapping("/temp/password")
-	@PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
-	public ResponseEntity<Message<Void>> sendTempPassword(@AuthenticationPrincipal MemberLoginActiveDto memberLoginActiveDto) {
-		MailCodeDto mailCodeDto = emailService.sendSimpleMessage(memberLoginActiveDto.getEmail(), false);
-		// 여기에 임시 비밀번호 재발급 하는 service 부르기
-
-
+	@GetMapping("/{email}/temp/password")
+	public ResponseEntity<Message<Void>> sendTempPassword(@PathVariable("email") String memberEmail) {
+		MailCodeDto mailCodeDto = emailService.sendSimpleMessage(memberEmail, false);
+		memberService.sendTempPassword(memberEmail, mailCodeDto);
 		return ResponseEntity.ok().body(Message.success());
 	}
 
