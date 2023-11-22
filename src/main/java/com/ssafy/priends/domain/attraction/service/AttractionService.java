@@ -23,4 +23,6 @@ public interface AttractionService {
 	void updateHit(int attractionId) throws Exception;
 
 	List<AttractionDto> topGetAttractionList();
+
+	List<AttractionDto> recommendGetAttractionList();
 } 

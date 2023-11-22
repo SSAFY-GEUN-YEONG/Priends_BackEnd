@@ -28,4 +28,6 @@ public interface AttractionMapper {
 	void updateHit(int attractionId) throws SQLException;
 
 	List<AttractionDto> topGetAttractionList();
+
+	List<AttractionDto> recommendGetAttractionList();
 }
