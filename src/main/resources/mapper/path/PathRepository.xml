@@ -47,15 +47,42 @@
 		values (#{title}, #{content}, #{startDate}, #{endDate}, #{memberId})
 	</insert>
 
-	<select id="getPathList"  resultMap="pathResultMap">
+	<select id="getPathList" resultMap="pathResultMap">
+		SELECT p.id AS id, p.title AS title, p.content, p.hit as hit,
+			   p.start_date, p.end_date, p.member_id, nickname
+		FROM path p
+			JOIN path_details d ON p.id = d.path_id
+			JOIN attraction_info a ON d.content_id = a.content_id
+			JOIN members m on p.member_id = m.id
+		where is_deleted = false
+		<choose>
+			<when test='pathId > 0 '>and p.id = #{pathId} </when>
+			<otherwise></otherwise>
+		</choose>
+		<choose>
+			<when test='city'>and a.addr1 LIKE '%${city}%' </when>
+			<otherwise></otherwise>
+		</choose>
+		group by p.id, p.title, p.content, p.hit ,
+	   		p.start_date, p.end_date, p.member_id, nickname
+		<choose>
+			<when test='order'>order by p.createdAt desc</when>
+			<when test='order == 1'>order by p.createdAt desc</when>
+			<when test='order == 2'>order by p.title </when>
+		</choose> 
+		<choose>
+			<when test='limitCount==0'></when>
+			<otherwise>limit ${limitCount}</otherwise>
+		</choose>
+	</select>
+
+	<select id="getMyPathList"  resultMap="pathResultMap">
 		select path.id, title, content, hit, createdAt, start_date, end_Date, member_id, nickname
 		from path join members m 
 		on path.member_id = m.id
-		where is_deleted = false 
-		<if test="isMy">
-			and member_id = #{memberId}
-		</if>
-		order by createdAt;
+		where is_deleted = false  
+		and member_id = #{memberId} 
+		order by createdAt
 	</select>
 
 	<update id="updatePath" parameterType="pathDto">
@@ -135,6 +162,14 @@
 		order by gugun_code
 
 	</select>
+	
+	<update id="updateHit" >
+			update path
+			set hit = hit + 1
+			where id = #{pathId}
+	</update>
+	
+	
 
 <!-- 지역코드 입력해서 해당 지역의 path 가져오기. param으로 sido, gugun 여부 받아야함
  select * 
