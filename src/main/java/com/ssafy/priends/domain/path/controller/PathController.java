@@ -25,27 +25,18 @@ public class PathController {
 	@PostMapping("/create")
 	@PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
 	public ResponseEntity<Message<Long>> createPath(@RequestBody PathInsertRequestDto pathInsertRequestDto,
-			@AuthenticationPrincipal 
-			MemberLoginActiveDto memberLoginActiveDto) {
-		
-		if (pathInsertRequestDto != null) {
-		    // 기존 코드
-			System.out.println("create " + pathInsertRequestDto);
-			Long createdPathId = pathService.createPath(pathInsertRequestDto, memberLoginActiveDto.getId());
-			return ResponseEntity.ok().body(Message.success(createdPathId));
-		} else {
-		    // pathInsertRequestDto가 null인 경우 처리
-			System.out.println("null");
-			return ResponseEntity.ok().body(Message.success(null));
-		}
-		
+			@AuthenticationPrincipal MemberLoginActiveDto memberLoginActiveDto) {
+
+		System.out.println("create " + pathInsertRequestDto);
+		Long createdPathId = pathService.createPath(pathInsertRequestDto, memberLoginActiveDto.getId());
+		return ResponseEntity.ok().body(Message.success(createdPathId));
+
 	}
 
 	@GetMapping("/get/list")
-//	@PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
+	@PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
 	public ResponseEntity<Message<List<PathGetDto>>> getPathList(@RequestParam() boolean isMy,
-//			@AuthenticationPrincipal 
-			MemberLoginActiveDto memberLoginActiveDto) {
+			@AuthenticationPrincipal MemberLoginActiveDto memberLoginActiveDto) {
 		List<PathGetDto> pathList = pathService.getPathList(isMy, memberLoginActiveDto.getId());
 		return ResponseEntity.ok().body(Message.success(pathList));
 	}
@@ -88,7 +79,7 @@ public class PathController {
 		System.out.println("sido - 호출");
 		List<AreacodeDto> sidoList = pathService.getSido();
 		return ResponseEntity.ok().body(Message.success(sidoList));
-    }
+	}
 
 	@GetMapping("/make/gugun")
 	public ResponseEntity<Message<List<AreacodeDto>>> gugun(@RequestParam("sido") int sido) throws Exception {

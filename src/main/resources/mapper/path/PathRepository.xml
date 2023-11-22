@@ -48,8 +48,9 @@
 	</insert>
 
 	<select id="getPathList"  resultMap="pathResultMap">
-		select id, title, content, hit, createdAt, start_date, end_Date, member_id, nickname
-		from path
+		select path.id, title, content, hit, createdAt, start_date, end_Date, member_id, nickname
+		from path join members m 
+		on path.member_id = m.id
 		where is_deleted = false 
 		<if test="isMy">
 			and member_id = #{memberId}
