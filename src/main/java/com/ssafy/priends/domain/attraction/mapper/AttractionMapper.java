@@ -26,4 +26,6 @@ public interface AttractionMapper {
 	List<AttractionDto> getAttractionListAreaCategory(String city, String category, boolean isOnlySi, int order, int limitcount) throws SQLException;
 
 	void updateHit(int attractionId) throws SQLException;
+
+	List<AttractionDto> topGetAttractionList();
 }

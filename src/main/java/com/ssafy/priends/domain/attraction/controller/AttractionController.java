@@ -99,4 +99,10 @@ public class AttractionController {
 		return ResponseEntity.ok().body(Message.success(attraction));
 	}
 
+	// 관광지 조회수 기준 상위 4개 가져오기 (메인 페이지 시작 시)
+	@GetMapping("/top/get")
+	public ResponseEntity<Message<List<AttractionDto>>> getAttraction() {
+		List<AttractionDto> attractionDtoList = attractionService.topGetAttractionList();
+		return ResponseEntity.ok().body(Message.success(attractionDtoList));
+	}
 }

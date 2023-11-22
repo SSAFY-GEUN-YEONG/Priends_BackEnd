@@ -177,4 +177,12 @@
 			<otherwise>limit 10</otherwise>
 		</choose>
 	</select>
+
+	<!-- 조회수 기준으로 상위 4개 여행 데이터 들고오기 -->
+	<select id="topGetAttractionList" resultType="attractionDto">
+		select content_id, title, addr1, first_image
+		from attraction_info
+		order by readcount desc
+		limit 4
+	</select>
 </mapper>
