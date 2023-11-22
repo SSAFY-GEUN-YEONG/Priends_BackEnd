@@ -64,4 +64,9 @@ public class AttractionServiceImpl implements AttractionService {
 		return attractionMapper.topGetAttractionList();
 	}
 
+	@Override
+	public List<AttractionDto> recommendGetAttractionList() {
+		return attractionMapper.recommendGetAttractionList();
+	}
+
 }
