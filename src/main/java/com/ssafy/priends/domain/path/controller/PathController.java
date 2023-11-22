@@ -10,6 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,10 +36,18 @@ public class PathController {
 	}
 
 	@GetMapping("/get/list")
+	public ResponseEntity<Message<List<PathGetDto>>> getPathList(@RequestParam Long pathId,@RequestParam String city, @RequestParam int order,
+			@RequestParam int limitCount) {
+		List<PathGetDto> pathList = pathService.getPathList(pathId, city, order, limitCount);
+		System.out.println(pathList);
+		return ResponseEntity.ok().body(Message.success(pathList));
+	}
+
+	@GetMapping("/get/mylist")
 	@PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
-	public ResponseEntity<Message<List<PathGetDto>>> getPathList(@RequestParam() boolean isMy,
+	public ResponseEntity<Message<List<PathGetDto>>> getMyPathList(
 			@AuthenticationPrincipal MemberLoginActiveDto memberLoginActiveDto) {
-		List<PathGetDto> pathList = pathService.getPathList(isMy, memberLoginActiveDto.getId());
+		List<PathGetDto> pathList = pathService.getMyPathList(memberLoginActiveDto.getId());
 		return ResponseEntity.ok().body(Message.success(pathList));
 	}
 
@@ -56,10 +66,14 @@ public class PathController {
 	}
 
 	@GetMapping("/detail/get/list/{pathId}")
-	@PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
+//	@PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
 	public ResponseEntity<Message<List<PathDetailWithAttractionDto>>> getPathDetailList(
 			@PathVariable("pathId") Long pathId) {
+		System.out.println("detail get list with attarction");
+		 
+		pathService.updateHit(pathId);
 		List<PathDetailWithAttractionDto> pathDetails = pathService.getPathDetailsWithAttraction(pathId);
+		System.out.println(pathDetails.get(0));
 		return ResponseEntity.ok().body(Message.success(pathDetails));
 	}
 

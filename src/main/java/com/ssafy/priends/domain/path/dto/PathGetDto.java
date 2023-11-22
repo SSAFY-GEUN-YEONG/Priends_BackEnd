@@ -3,12 +3,14 @@ package com.ssafy.priends.domain.path.dto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.time.LocalDate;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@ToString
 public class PathGetDto {
     private Long id;    // 여행 경로 id
     private String title;   // 여행 경로 제목 (이름)

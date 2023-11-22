@@ -3,10 +3,12 @@ package com.ssafy.priends.domain.path.dto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@ToString
 public class PathDetailWithAttractionDto {
     private Long id;    // 여행 경로 상세 id
     private int orders; // 일자 별 순서 (1일차에서 1, 2, 3, ...)
