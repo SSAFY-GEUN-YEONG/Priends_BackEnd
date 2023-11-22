@@ -135,7 +135,6 @@
 		order by gugun_code
 
 	</select>
-	
 
 <!-- 지역코드 입력해서 해당 지역의 path 가져오기. param으로 sido, gugun 여부 받아야함
  select * 
