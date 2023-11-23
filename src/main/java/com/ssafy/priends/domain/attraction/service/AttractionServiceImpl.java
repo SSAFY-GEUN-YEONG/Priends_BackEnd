@@ -74,4 +74,9 @@ public class AttractionServiceImpl implements AttractionService {
 	public List<AttractionDto> recommendGetAttractionList() {
 		return attractionMapper.recommendGetAttractionList();
 	}
+
+	@Override
+	public List<AttractionDto> nearGetAttractionList(int attractionId) {
+		return attractionMapper.nearGetAttractionList(attractionId);
+	}
 }
