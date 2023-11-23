@@ -29,6 +29,11 @@
 		from boards b join members m
 		on b.member_id = m.id
 		where b.category = #{category}
+		<choose>
+			<when test='myId != ""'>
+				and b.member_id = #{myId}
+			</when>
+		</choose>
 		<include refid="search"></include>
 		and b.is_deleted = 0
 		order by b.id desc
@@ -50,6 +55,11 @@
 				<where>
 					<include refid="search"></include>
 					and b.is_deleted = 0
+					<choose>
+						<when test='myId != ""'>
+							and b.member_id = #{myId}
+						</when>
+					</choose>
 				</where>
 			</otherwise>
 		</choose>

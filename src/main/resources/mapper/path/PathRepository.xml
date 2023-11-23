@@ -49,7 +49,7 @@
 
 	<select id="getPathList" resultMap="pathResultMap">
 		SELECT p.id AS id, p.title AS title, p.content, p.hit as hit,
-			   p.start_date, p.end_date, p.member_id, nickname
+			   p.start_date, p.end_date, p.member_id, nickname, m.image AS memberImage
 		FROM path p
 			JOIN path_details d ON p.id = d.path_id
 			JOIN attraction_info a ON d.content_id = a.content_id
@@ -60,7 +60,7 @@
 			<otherwise></otherwise>
 		</choose>
 		<choose>
-			<when test='city'>and a.addr1 LIKE '%${city}%' </when>
+			<when test='city'>and a.addr1 like '%${city}%' </when>
 			<otherwise></otherwise>
 		</choose>
 		group by p.id, p.title, p.content, p.hit ,

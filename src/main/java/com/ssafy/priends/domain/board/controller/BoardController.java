@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.ssafy.priends.domain.member.dto.MemberLoginActiveDto;
+import com.ssafy.priends.domain.path.dto.PathGetDto;
 import com.ssafy.priends.global.common.dto.Message;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -27,34 +28,36 @@ import com.ssafy.priends.domain.board.dto.BoardListDto;
 import com.ssafy.priends.domain.board.dto.BoardMemberDto;
 import com.ssafy.priends.domain.board.service.BoardService;
 
-
 @Slf4j
 @RestController
 @RequestMapping("/board")
 @RequiredArgsConstructor
 public class BoardController {
-	
+
 	private final BoardService boardService;
 
 	// 멤버에서 토큰 보내주면 받아와서 boardDto에 넘겨줘야함
 	@PostMapping("/write")
 	@PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
 	public ResponseEntity<Message<Void>> writePost(@RequestBody BoardDto boardDto,
-												   @AuthenticationPrincipal MemberLoginActiveDto memberLoginActiveDto) throws Exception {
+			@AuthenticationPrincipal MemberLoginActiveDto memberLoginActiveDto) throws Exception {
 		boardDto.setMember_id(memberLoginActiveDto.getId());
 		boardService.writePost(boardDto);
-		return ResponseEntity.ok().body(Message.success()); //0:성공, 1:실패
+		return ResponseEntity.ok().body(Message.success()); // 0:성공, 1:실패
 	}
- 
+
 	// category에 따라서 글 가져오기 -> category : 'NOTICE','FREE','QNA'
 	@GetMapping("/list")
-	public ResponseEntity<Message<BoardListDto>> listPost(@RequestParam  Map<String, String> map) throws Exception {
-	
+	@PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
+	public ResponseEntity<Message<BoardListDto>> listPost(@RequestParam Map<String, String> map,
+			@AuthenticationPrincipal MemberLoginActiveDto memberLoginActiveDto) throws Exception {
+		if (map.get("isMyPost").equals("true")) {
+			map.put("myId", memberLoginActiveDto.getId().toString());
+		}
 		System.out.println("listArticle map - {}" + map);
 		BoardListDto list = boardService.listPost(map);
 		return ResponseEntity.ok().body(Message.success(list));
 	}
-	
 
 	@GetMapping("/view/{id}")
 	public ResponseEntity<Message<BoardMemberDto>> getPost(@PathVariable("id") long id) throws Exception {
@@ -65,12 +68,12 @@ public class BoardController {
 	}
 
 	@GetMapping("/modify/{id}")
-	public ResponseEntity<Message<BoardMemberDto>> modifyPost( @PathVariable("id") long id) throws Exception {
+	public ResponseEntity<Message<BoardMemberDto>> modifyPost(@PathVariable("id") long id) throws Exception {
 		BoardMemberDto board = boardService.getPost(id);
 		return ResponseEntity.ok().body(Message.success(board));
 	}
 
-	@PutMapping("/modify") 
+	@PutMapping("/modify")
 	public ResponseEntity<Message<Void>> modifyPost(@RequestBody BoardMemberDto board) throws Exception {
 		System.out.println("modify");
 		boardService.modifyPost(board);

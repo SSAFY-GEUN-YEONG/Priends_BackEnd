@@ -12,4 +12,5 @@ public class MemberGetDto {
     String nickname;
     String image;
     String alarm;
+    Long id;
 }

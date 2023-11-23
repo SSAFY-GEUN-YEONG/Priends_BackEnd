@@ -53,6 +53,10 @@ public class BoardServiceImpl implements BoardService {
 //		else 
 		if ("id".equals(key))
 			param.put("key", key == null ? "" : "b.id");
+		
+		//내가 쓴 글 가져오기
+		param.put("myId", map.get("myId") == null ? "" : map.get("myId"));
+		
 		List<BoardMemberDto> list = boardMapper.listPost(param);
 
 //		if ("member_id".equals(key))
@@ -60,6 +64,7 @@ public class BoardServiceImpl implements BoardService {
 //		else
 		if ("id".equals(key))
 			param.put("key", key == null ? "" : "id");
+ 
 		int totalArticleCount = boardMapper.getTotalArticleCount(param);
 		int totalPageCount = (totalArticleCount - 1) / sizePerPage + 1;
 

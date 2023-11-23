@@ -21,4 +21,5 @@ public class PathGetDto {
     private LocalDate endDate;  // 여행 종료 날짜
     private Long memberId;  // 회원 id
     private String memberNickname;  // 회원 닉네임
+    private String memberImage;  // 회원 프로필 사진
 }
