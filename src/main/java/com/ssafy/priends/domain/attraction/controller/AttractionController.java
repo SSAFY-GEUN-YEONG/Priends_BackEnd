@@ -123,4 +123,11 @@ public class AttractionController {
 		return ResponseEntity.ok().body(Message.success(attractionDtoList));
 	}
 
+	// 해당 관광지 id를 통해 가장 가까운 3곳 정보 가져오기
+	@GetMapping("{attractionId}/near/get")
+	public ResponseEntity<Message<List<AttractionDto>>> nearGetAttractionList(@PathVariable("attractionId") int attractionId) {
+		List<AttractionDto> attractionDtoList = attractionService.nearGetAttractionList(attractionId);
+		return ResponseEntity.ok().body(Message.success(attractionDtoList));
+	}
+
 }
