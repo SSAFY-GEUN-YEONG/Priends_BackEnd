@@ -28,4 +28,6 @@ public interface AttractionService {
 	List<AttractionDto> topGetAttractionList();
 
 	List<AttractionDto> recommendGetAttractionList();
+
+	List<AttractionDto> nearGetAttractionList(int attractionId);
 } 

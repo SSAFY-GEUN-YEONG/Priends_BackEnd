@@ -32,4 +32,6 @@ public interface AttractionMapper {
 	List<AttractionDto> topGetAttractionList();
 
 	List<AttractionDto> recommendGetAttractionList();
+
+	List<AttractionDto> nearGetAttractionList(int attractionId);
 }

@@ -209,4 +209,22 @@
 		order by rand()
 		limit 4
 	</select>
+
+	<!-- 해당 관광지와 가장 가까운 장소(관광지) 가져오기 -->
+	<select id="nearGetAttractionList" parameterType="Integer" resultType="attractionDto">
+		select destination.*,
+			   ST_DISTANCE_Sphere(
+					   point(origin.longitude, origin.latitude),
+					   point(destination.longitude, destination.latitude)
+				   ) as distance
+		from attraction_info as origin,
+			 attraction_info as destination
+		where
+			origin.content_id = #{id} and
+			origin.content_id != destination.content_id and
+			destination.first_image is not null and
+            destination.first_image != ''
+		order by distance asc
+			limit 3;
+	</select>
 </mapper>
