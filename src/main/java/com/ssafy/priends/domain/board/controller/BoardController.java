@@ -3,10 +3,14 @@ package com.ssafy.priends.domain.board.controller;
 import java.util.List;
 import java.util.Map;
 
+import com.ssafy.priends.domain.member.dto.MemberLoginActiveDto;
 import com.ssafy.priends.global.common.dto.Message;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,6 +28,7 @@ import com.ssafy.priends.domain.board.dto.BoardMemberDto;
 import com.ssafy.priends.domain.board.service.BoardService;
 
 
+@Slf4j
 @RestController
 @RequestMapping("/board")
 @RequiredArgsConstructor
@@ -33,12 +38,11 @@ public class BoardController {
 
 	// 멤버에서 토큰 보내주면 받아와서 boardDto에 넘겨줘야함
 	@PostMapping("/write")
-	public ResponseEntity<Message<Void>> writePost( @RequestBody BoardDto boardDto ) throws Exception {
-//		MemberDto member = (MemberDto) session.getAttribute("userinfo");
-//		board.setUser_id(member.getId());
-		System.out.println(boardDto);
+	@PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
+	public ResponseEntity<Message<Void>> writePost(@RequestBody BoardDto boardDto,
+												   @AuthenticationPrincipal MemberLoginActiveDto memberLoginActiveDto) throws Exception {
+		boardDto.setMember_id(memberLoginActiveDto.getId());
 		boardService.writePost(boardDto);
-		
 		return ResponseEntity.ok().body(Message.success()); //0:성공, 1:실패
 	}
  
@@ -50,26 +54,10 @@ public class BoardController {
 		BoardListDto list = boardService.listPost(map);
 		return ResponseEntity.ok().body(Message.success(list));
 	}
-	/* 
-	public ResponseEntity<?> listArticle(
-			@RequestParam  ( required = true) Map<String, String> map) {
-		log.info("listArticle map - {}", map);
-		try {
-			BoardListDto boardListDto = boardService.listArticle(map);
-			HttpHeaders header = new HttpHeaders();
-			header.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
-			return ResponseEntity.ok().headers(header).body(boardListDto);
-		} catch (Exception e) {
-			return exceptionHandling(e);
-		}
-	}
-
-	 */
-	
 	
 
 	@GetMapping("/view/{id}")
-	public ResponseEntity<Message<BoardMemberDto>> getPost( @PathVariable("id") long id) throws Exception {
+	public ResponseEntity<Message<BoardMemberDto>> getPost(@PathVariable("id") long id) throws Exception {
 		System.out.println("id=" + id);
 		boardService.updateHit(id);
 		BoardMemberDto board = boardService.getPost(id);
