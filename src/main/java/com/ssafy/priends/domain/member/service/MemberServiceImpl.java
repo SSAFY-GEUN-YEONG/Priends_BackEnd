@@ -56,6 +56,7 @@ public class MemberServiceImpl implements MemberService {
 		if(memberGetDto == null) {
 			throw new MemberException(MemberError.NOT_EXIST_MEMBER);
 		}
+
 		memberMapper.updateMember(memberDto);
 	}
 
