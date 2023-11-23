@@ -63,15 +63,15 @@
 
 	<select id="getAreaName">
 		<choose>
-			<when test='sido > 10'> select g.gugun_name</when>
-			<otherwise>	SELECT s.sido_name</otherwise>
+			<when test='sido &lt; 10 || gugun ==0'> select s.sido_name</when>
+			<otherwise>	SELECT g.gugun_name</otherwise>
 		</choose>
 		from sido s join gugun g
 		on s.sido_code = g.sido_code
 		where s.sido_code = #{sido}
 		<choose>
-			<when test='sido > 10'>	and gugun_code= #{gugun}</when>
-			<otherwise></otherwise>
+			<when test='sido &lt; 10 || gugun == 0'> </when>
+			<otherwise>and gugun_code= #{gugun}</otherwise>
 		</choose>
 		group by s.sido_name
 	</select>
