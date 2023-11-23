@@ -46,7 +46,9 @@ public class MemberController {
 
 	@PutMapping("/update")
 	@PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
-	public ResponseEntity<Message<Void>> updateMember(@RequestBody MemberDto memberDto) {
+	public ResponseEntity<Message<Void>> updateMember(@RequestBody MemberDto memberDto,
+													  @AuthenticationPrincipal MemberLoginActiveDto memberLoginActiveDto) {
+		memberDto.setId(memberLoginActiveDto.getId());
 		memberService.updateMember(memberDto);
 		return ResponseEntity.ok().body(Message.success());
 	}
@@ -59,6 +61,7 @@ public class MemberController {
 	}
 
 	@PutMapping("/delete")
+	@PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
 	public ResponseEntity<Message<Void>> deleteMember(@AuthenticationPrincipal MemberLoginActiveDto memberLoginActiveDto) {
 		memberService.deleteMember(memberLoginActiveDto.getId());
 		return ResponseEntity.ok().body(Message.success());
