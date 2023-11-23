@@ -25,4 +25,7 @@ public interface AttractionService {
 	String getAreaName(int sido, int gugun) throws Exception;
 
 
+	List<AttractionDto> topGetAttractionList();
+
+	List<AttractionDto> recommendGetAttractionList();
 } 

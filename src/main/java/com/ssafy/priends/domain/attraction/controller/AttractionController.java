@@ -108,5 +108,19 @@ public class AttractionController {
 		attractionService.updateHit(attractionId);
 		return ResponseEntity.ok().body(Message.success(attraction));
 	}
+	// 관광지 조회수 기준 상위 4개 가져오기 (메인 페이지 시작 시)
+	@GetMapping("/top/get")
+	public ResponseEntity<Message<List<AttractionDto>>> getAttraction() {
+		List<AttractionDto> attractionDtoList = attractionService.topGetAttractionList();
+		return ResponseEntity.ok().body(Message.success(attractionDtoList));
+	}
+
+	// 무작위로 관광지 정보 4개 가져오기 (메인 페이지 시작 시)
+	// 추후에 추천 알고리즘 적용 할 예정
+	@GetMapping("/recommend/get")
+	public ResponseEntity<Message<List<AttractionDto>>> recommendGetAttractionList() {
+		List<AttractionDto> attractionDtoList = attractionService.recommendGetAttractionList();
+		return ResponseEntity.ok().body(Message.success(attractionDtoList));
+	}
 
 }

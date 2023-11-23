@@ -191,4 +191,22 @@
 			<otherwise>limit 10</otherwise>
 		</choose>
 	</select>
+	
+	<!-- 조회수 기준으로 상위 4개 여행 데이터 들고오기 -->
+	<select id="topGetAttractionList" resultType="attractionDto">
+		select content_id, title, addr1, first_image
+		from attraction_info
+		order by readcount desc
+		limit 4
+	</select>
+	
+	<!-- 무작위로 4개 관광지 정보 데이터 가져오기 -->
+	<!-- 추후에 추천 알고리즘 적용할 예정 -->
+	<select id="recommendGetAttractionList" resultType="attractionDto">
+		select content_id, title, first_image
+		from attraction_info
+		where first_image is not null and first_image != ''
+		order by rand()
+		limit 4
+	</select>
 </mapper>

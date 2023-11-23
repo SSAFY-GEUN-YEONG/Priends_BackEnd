@@ -48,15 +48,15 @@ public class AttractionServiceImpl implements AttractionService {
 	}
 
 	@Override
-	public List<AttractionDto> getAttractionListAreaCategory(String city, String category, boolean isOnlySi, int order, int limitcount)
-			throws Exception {
+	public List<AttractionDto> getAttractionListAreaCategory(String city, String category, boolean isOnlySi, int order,
+			int limitcount) throws Exception {
 		return attractionMapper.getAttractionListAreaCategory(city, category, isOnlySi, order, limitcount);
 	}
 
 	@Override
 	public void updateHit(int attractionId) throws Exception {
 		attractionMapper.updateHit(attractionId);
-		
+
 	}
 
 	@Override
@@ -65,4 +65,13 @@ public class AttractionServiceImpl implements AttractionService {
 		return attractionMapper.getAreaName(sido, gugun);
 	}
 
+	@Override
+	public List<AttractionDto> topGetAttractionList() {
+		return attractionMapper.topGetAttractionList();
+	}
+
+	@Override
+	public List<AttractionDto> recommendGetAttractionList() {
+		return attractionMapper.recommendGetAttractionList();
+	}
 }

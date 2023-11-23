@@ -20,12 +20,16 @@ public interface AttractionMapper {
 
 	String getAreaHomeImg(String city, boolean isOnlySi) throws SQLException;
 
-
- 
 	List<AttractionDto> getAttractionListAreaHome(String city, String category, boolean isOnlySi);
-	List<AttractionDto> getAttractionListAreaCategory(String city, String category, boolean isOnlySi, int order, int limitcount) throws SQLException;
+
+	List<AttractionDto> getAttractionListAreaCategory(String city, String category, boolean isOnlySi, int order,
+			int limitcount) throws SQLException;
 
 	void updateHit(int attractionId) throws SQLException;
 
 	String getAreaName(int sido, int gugun) throws SQLException;
+
+	List<AttractionDto> topGetAttractionList();
+
+	List<AttractionDto> recommendGetAttractionList();
 }
