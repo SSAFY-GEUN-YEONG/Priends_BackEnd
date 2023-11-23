@@ -20,7 +20,7 @@
 
 	<!-- 회원정보 수정 -->
 	<update id="updateMember" parameterType="memberDto">
-		update members set password = #{password}, name = #{nickname}, alarm = #{alarm}
+		update members set nickname = #{nickname}, alarm = #{alarm}, image = #{image}
 		where id = #{id}
 	</update>
 
