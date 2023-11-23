@@ -22,5 +22,7 @@ public interface AttractionService {
 
 	void updateHit(int attractionId) throws Exception;
 
+	String getAreaName(int sido, int gugun) throws Exception;
+
 
 } 

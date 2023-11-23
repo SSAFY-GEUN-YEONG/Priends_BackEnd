@@ -59,4 +59,10 @@ public class AttractionServiceImpl implements AttractionService {
 		
 	}
 
+	@Override
+	public String getAreaName(int sido, int gugun) throws Exception {
+		// TODO Auto-generated method stub
+		return attractionMapper.getAreaName(sido, gugun);
+	}
+
 }

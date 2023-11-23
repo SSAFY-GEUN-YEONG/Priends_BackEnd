@@ -14,6 +14,7 @@ import lombok.ToString;
 public class AttractionDto {
 	
 	private int content_id;
+	private int content_type_id;
 	private String title;		 
 	private String addr1;		 
 	private String addr2;	 

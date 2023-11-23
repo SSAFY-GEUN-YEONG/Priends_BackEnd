@@ -38,6 +38,7 @@ public class PathController {
 	@GetMapping("/get/list")
 	public ResponseEntity<Message<List<PathGetDto>>> getPathList(@RequestParam Long pathId,@RequestParam String city, @RequestParam int order,
 			@RequestParam int limitCount) {
+		System.out.println("order, "+ order);
 		List<PathGetDto> pathList = pathService.getPathList(pathId, city, order, limitCount);
 		System.out.println(pathList);
 		return ResponseEntity.ok().body(Message.success(pathList));

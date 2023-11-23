@@ -65,10 +65,9 @@
 		</choose>
 		group by p.id, p.title, p.content, p.hit ,
 	   		p.start_date, p.end_date, p.member_id, nickname
-		<choose>
-			<when test='order'>order by p.createdAt desc</when>
+		<choose> 
 			<when test='order == 1'>order by p.createdAt desc</when>
-			<when test='order == 2'>order by p.title </when>
+			<when test='order == 2'>order by p.hit desc </when>
 		</choose> 
 		<choose>
 			<when test='limitCount==0'></when>

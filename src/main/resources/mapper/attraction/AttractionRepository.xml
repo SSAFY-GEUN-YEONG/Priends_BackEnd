@@ -29,7 +29,7 @@
 
 
 	<select id="getAttraction">
-		select i.content_id, i.title, i.addr1, i.addr2,
+		select i.content_id, i.content_type_id, i.title, i.addr1, i.addr2,
 		i.latitude, i.longitude,i.readcount,
 		i.first_image, i.sido_code, d.overview
 		from
@@ -59,7 +59,22 @@
 			IF(sido.sido_code &lt; 10, sido.sido_name, g.gugun_name)
 		</otherwise>
 	</choose>
-	</select>	
+	</select>
+
+	<select id="getAreaName">
+		<choose>
+			<when test='sido > 10'> select g.gugun_name</when>
+			<otherwise>	SELECT s.sido_name</otherwise>
+		</choose>
+		from sido s join gugun g
+		on s.sido_code = g.sido_code
+		where s.sido_code = #{sido}
+		<choose>
+			<when test='sido > 10'>	and gugun_code= #{gugun}</when>
+			<otherwise></otherwise>
+		</choose>
+		group by s.sido_name
+	</select>
 
 	<update id="updateHit" >
 			update attraction_info
@@ -167,10 +182,9 @@
 			<when test="category == 'activity'"> a.content_type_id = 28</when>
 			<when test="category == 'nature'"> a.content_type_id in (12, 25)</when>
 		</choose>
-		<choose>
-			<when test='order'>order by readcount desc</when>
-			<when test='order == 1'>order by readcount desc</when>
-			<when test='order == 2'>order by i.title desc</when>
+		<choose> 
+			<when test='order == 1'>order by i.title</when>
+			<when test='order == 2'>order by readcount desc</when>
 		</choose>
 		<choose>
 			<when test='limitcount==0'></when>

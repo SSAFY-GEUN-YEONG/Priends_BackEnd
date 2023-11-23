@@ -36,6 +36,14 @@ public class AttractionController {
 		return ResponseEntity.ok().body(Message.success(areas));
 	}
 
+	@GetMapping("/area/get/name")
+	public ResponseEntity<Message<String>> getAreaName(@RequestParam int sido, @RequestParam int gugun)
+			throws Exception {
+		String area = attractionService.getAreaName(sido, gugun);
+		System.out.println("get name" + sido + " / " + gugun + " / " + area);
+		return ResponseEntity.ok().body(Message.success(area));
+	}
+
 	@GetMapping("/area/{city}/home")
 	public ResponseEntity<Message<AreaHomeDto>> getAreaHome(@RequestParam String city, @RequestParam String category)
 			throws Exception {
@@ -47,26 +55,28 @@ public class AttractionController {
 		areaHome.setImg(attractionService.getAreaHomeImg(city, isOnlySi));
 
 		// 관광명소가져오기
-		areaHome.setNatureAttractions(attractionService.getAttractionListAreaHome(city,"nature", isOnlySi ));
-		areaHome.setRestaurantAttractions(attractionService.getAttractionListAreaHome(city,"restaurant", isOnlySi ));
-		areaHome.setCultureAttractions(attractionService.getAttractionListAreaHome(city,"culture", isOnlySi ));
+		areaHome.setNatureAttractions(attractionService.getAttractionListAreaHome(city, "nature", isOnlySi));
+		areaHome.setRestaurantAttractions(attractionService.getAttractionListAreaHome(city, "restaurant", isOnlySi));
+		areaHome.setCultureAttractions(attractionService.getAttractionListAreaHome(city, "culture", isOnlySi));
 		System.out.println(areaHome);
 		return ResponseEntity.ok().body(Message.success(areaHome));
 
 	}
-	
-	@GetMapping("/area/{city}/{category}")
-	public ResponseEntity<Message<List<AttractionDto>>> getAreaList(@RequestParam String city, @RequestParam String category,@RequestParam(required = false) Integer order, @RequestParam(required = false) Integer limitcount)
-			throws Exception {
-		System.out.println(category);
-		boolean isOnlySi = Arrays.asList(maincity).contains(city); 
-		if(order == null) order =1;
-		if(limitcount== null) limitcount= 0;
-		
 
-		List<AttractionDto> attractionList= attractionService.getAttractionListAreaCategory(city,category, isOnlySi, order , limitcount );
-		
-		
+	@GetMapping("/area/{city}/{category}")
+	public ResponseEntity<Message<List<AttractionDto>>> getAreaList(@RequestParam String city,
+			@RequestParam String category, @RequestParam(required = false) Integer order,
+			@RequestParam(required = false) Integer limitcount) throws Exception {
+		System.out.println(category);
+		boolean isOnlySi = Arrays.asList(maincity).contains(city);
+		if (order == null)
+			order = 1;
+		if (limitcount == null)
+			limitcount = 0;
+
+		List<AttractionDto> attractionList = attractionService.getAttractionListAreaCategory(city, category, isOnlySi,
+				order, limitcount);
+
 		return ResponseEntity.ok().body(Message.success(attractionList));
 
 	}
