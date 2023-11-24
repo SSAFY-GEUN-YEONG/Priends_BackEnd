@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper
-	namespace="com.ssafy.priends.domain.attraction.mapper.AttractionMapper">
+		namespace="com.ssafy.priends.domain.attraction.mapper.AttractionMapper">
 
 
 	<select id="searchAttractions">
 		select *
 		from attraction_info
 		where sido_code = #{area}
-		<!-- {0:전체, 1:호텔/32, 2:문화생활/14.15, 3:음식점/39, 4:마켓/38, 5:액티비티/28, 6:자연/12.25 
-			} -->
+		<!-- {0:전체, 1:호텔/32, 2:문화생활/14.15, 3:음식점/39, 4:마켓/38, 5:액티비티/28, 6:자연/12.25
+            } -->
 		<choose>
 			<when test="typeid == 0"></when>
 			<when test="typeid == 1">and content_type_id = 32</when>
@@ -30,41 +30,41 @@
 
 	<select id="getAttraction">
 		select i.content_id, i.content_type_id, i.title, i.addr1, i.addr2,
-		i.latitude, i.longitude,i.readcount,
-		i.first_image, i.sido_code, d.overview
+			   i.latitude, i.longitude,i.readcount,
+			   i.first_image, i.sido_code, d.overview
 		from
-		attraction_info i left join attraction_description d
-		on i.content_id =
-		d.content_id
+			attraction_info i left join attraction_description d
+										on i.content_id =
+										   d.content_id
 		where i.content_id= #{attractionId};
 	</select>
 
 	<select id="getAllArea">
-	<choose>
-		<when test='word == ""'>
-			SELECT s.sido_code, s.sido_name, g.gugun_code, g.gugun_name
-			FROM sido s LEFT JOIN gugun g ON s.sido_code = g.sido_code
-			WHERE s.sido_code > 10 and (g.gugun_name LIKE "%시" OR g.gugun_name LIKE
-			"%군")
-		</when>
-		<otherwise>
-			SELECT g.sido_code, sido.sido_name,
-			IF(sido.sido_code &lt; 10, sido.sido_code, g.gugun_code) AS gugun_code,
-			IF(sido.sido_code &lt; 10, sido.sido_name, g.gugun_name) AS gugun_name
-			FROM sido LEFT JOIN gugun g 
-			ON sido.sido_code = g.sido_code
-			WHERE sido.sido_name LIKE '%${word}%' OR g.gugun_name LIKE '%${word}%'
-			GROUP BY sido.sido_code, sido.sido_name, 
-			IF(sido.sido_code &lt; 10, sido.sido_code, g.gugun_code), 
-			IF(sido.sido_code &lt; 10, sido.sido_name, g.gugun_name)
-		</otherwise>
-	</choose>
+		<choose>
+			<when test='word == ""'>
+				SELECT s.sido_code, s.sido_name, g.gugun_code, g.gugun_name
+				FROM sido s LEFT JOIN gugun g ON s.sido_code = g.sido_code
+				WHERE s.sido_code > 10 and (g.gugun_name LIKE "%시" OR g.gugun_name LIKE
+				"%군")
+			</when>
+			<otherwise>
+				SELECT g.sido_code, sido.sido_name,
+				IF(sido.sido_code &lt; 10, sido.sido_code, g.gugun_code) AS gugun_code,
+				IF(sido.sido_code &lt; 10, sido.sido_name, g.gugun_name) AS gugun_name
+				FROM sido LEFT JOIN gugun g
+				ON sido.sido_code = g.sido_code
+				WHERE sido.sido_name LIKE '%${word}%' OR g.gugun_name LIKE '%${word}%'
+				GROUP BY sido.sido_code, sido.sido_name,
+				IF(sido.sido_code &lt; 10, sido.sido_code, g.gugun_code),
+				IF(sido.sido_code &lt; 10, sido.sido_name, g.gugun_name)
+			</otherwise>
+		</choose>
 	</select>
 
 	<select id="getAreaName">
 		<choose>
 			<when test='sido &lt; 10 || gugun ==0'> select s.sido_name</when>
-			<otherwise>	SELECT g.gugun_name</otherwise>
+			<otherwise>    SELECT g.gugun_name</otherwise>
 		</choose>
 		from sido s join gugun g
 		on s.sido_code = g.sido_code
@@ -77,9 +77,9 @@
 	</select>
 
 	<update id="updateHit" >
-			update attraction_info
-			set readcount = readcount + 1
-			where content_id = #{attractionId}
+		update attraction_info
+		set readcount = readcount + 1
+		where content_id = #{attractionId}
 	</update>
 
 
@@ -92,15 +92,15 @@
 				on a.sido_code= s.sido_code
 				where s.sido_name
 				like '%${city}%'
-				 AND (first_image IS NOT NULL AND TRIM(first_image) &lt;&gt; '')
+				AND (first_image IS NOT NULL AND TRIM(first_image) &lt;&gt; '')
 				order by rand() limit 1;
 			</when>
 			<otherwise>
 				(select s.sido_code, s.sido_name, g.gugun_code,
-					g.gugun_name
-					from sido s join gugun g
-					on s.sido_code = g.sido_code
-					where g.gugun_name like '%${city}%') b
+				g.gugun_name
+				from sido s join gugun g
+				on s.sido_code = g.sido_code
+				where g.gugun_name like '%${city}%') b
 				on a.sido_code= b.sido_code and
 				a.gugun_code = b.gugun_code
 				where (first_image IS NOT NULL AND TRIM(first_image) &lt;&gt; '')
@@ -120,6 +120,7 @@
 				on a.sido_code= s.sido_code
 				where s.sido_name
 				like '%${city}%'
+				and first_image is not null and first_image != ''
 				and
 			</when>
 			<otherwise>
@@ -130,7 +131,7 @@
 				where g.gugun_name like '%${city}%') b
 				on a.sido_code= b.sido_code and
 				a.gugun_code = b.gugun_code
-				where
+				where first_image is not null and first_image != ''
 			</otherwise>
 		</choose>
 		<choose>
@@ -150,9 +151,9 @@
 	<select id="getAttractionListAreaCategory">
 		select *
 		from (select i.content_id, i.title, i.content_type_id, i.addr1, i.addr2,
-				i.latitude, i.longitude, i.first_image,i.readcount,  i.sido_code, i.gugun_code, d.overview
-				from attraction_info i left join attraction_description d
-				on i.content_id = d.content_id) a join
+		i.latitude, i.longitude, i.first_image,i.readcount,  i.sido_code, i.gugun_code, d.overview
+		from attraction_info i left join attraction_description d
+		on i.content_id = d.content_id) a join
 		<choose>
 			<when test='isOnlySi'>
 				sido s
@@ -182,7 +183,7 @@
 			<when test="category == 'activity'"> a.content_type_id = 28</when>
 			<when test="category == 'nature'"> a.content_type_id in (12, 25)</when>
 		</choose>
-		<choose> 
+		<choose>
 			<when test='order == 1'>order by i.title</when>
 			<when test='order == 2'>order by readcount desc</when>
 		</choose>
@@ -191,15 +192,15 @@
 			<otherwise>limit 10</otherwise>
 		</choose>
 	</select>
-	
+
 	<!-- 조회수 기준으로 상위 4개 여행 데이터 들고오기 -->
 	<select id="topGetAttractionList" resultType="attractionDto">
 		select content_id, title, addr1, first_image
 		from attraction_info
 		order by readcount desc
-		limit 4
+			limit 4
 	</select>
-	
+
 	<!-- 무작위로 4개 관광지 정보 데이터 가져오기 -->
 	<!-- 추후에 추천 알고리즘 적용할 예정 -->
 	<select id="recommendGetAttractionList" resultType="attractionDto">
@@ -207,7 +208,7 @@
 		from attraction_info
 		where first_image is not null and first_image != ''
 		order by rand()
-		limit 4
+			limit 4
 	</select>
 
 	<!-- 해당 관광지와 가장 가까운 장소(관광지) 가져오기 -->
@@ -222,7 +223,7 @@
 		where
 			origin.content_id = #{id} and
 			origin.content_id != destination.content_id and
-			destination.first_image is not null and
+            destination.first_image is not null and
             destination.first_image != ''
 		order by distance asc
 			limit 3;
