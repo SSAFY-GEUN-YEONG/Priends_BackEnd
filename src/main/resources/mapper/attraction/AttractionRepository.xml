@@ -118,10 +118,8 @@
 			<when test='isOnlySi'>
 				sido s
 				on a.sido_code= s.sido_code
-				where s.sido_name
-				like '%${city}%'
-				and first_image is not null and first_image != ''
-				and
+				where s.sido_name like '%${city}%'
+				and (first_image IS NOT NULL AND TRIM(first_image) &lt;&gt; '')
 			</when>
 			<otherwise>
 				(select s.sido_code, s.sido_name, g.gugun_code,
@@ -131,17 +129,17 @@
 				where g.gugun_name like '%${city}%') b
 				on a.sido_code= b.sido_code and
 				a.gugun_code = b.gugun_code
-				where first_image is not null and first_image != ''
+				where (first_image IS NOT NULL AND TRIM(first_image) &lt;&gt; '')
 			</otherwise>
 		</choose>
 		<choose>
 			<when test="category == ''"></when>
-			<when test="category == 'hotel'"> a.content_type_id = 32</when>
-			<when test="category == 'culture'"> a.content_type_id in (14,15) </when>
-			<when test="category == 'restaurant'"> a.content_type_id = 39</when>
-			<when test="category == 'market'"> a.content_type_id = 38</when>
-			<when test="category == 'activity'"> a.content_type_id = 28</when>
-			<when test="category == 'nature'"> a.content_type_id in (12, 25)</when>
+			<when test="category == 'hotel'"> and a.content_type_id = 32</when>
+			<when test="category == 'culture'"> and a.content_type_id in (14,15) </when>
+			<when test="category == 'restaurant'"> and a.content_type_id = 39</when>
+			<when test="category == 'market'">and a.content_type_id = 38</when>
+			<when test="category == 'activity'">and a.content_type_id = 28</when>
+			<when test="category == 'nature'">and a.content_type_id in (12, 25)</when>
 		</choose>
 		order by readcount desc
 		limit 3
